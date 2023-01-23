@@ -14,10 +14,10 @@
 
 <title>QP Data Analysis</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -31,8 +31,9 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/table1-1.0/table1_defaults.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -59,7 +60,6 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -143,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -267,95 +271,860 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">QP Data Analysis</h1>
 <h4 class="author">Diana Sanchez</h4>
-<h4 class="date">August 2022</h4>
+<h4 class="date">AJanuary 2023</h4>
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#load-libraries">Load libraries</a></li>
-<li><a href="#analsyis-by-groups">Analsyis by groups</a>
-<ul>
-<li><a href="#linear-regression-model-for-nonlanguage-backward-task">Linear regression model for nonLanguage BACKWARD task</a></li>
-<li><a href="#linear-regression-model-for-nonlanguage-flanker-task">Linear regression model for nonLanguage FLANKER task</a></li>
-<li><a href="#linear-regression-model-for-nonlanguage-stroop-task">Linear regression model for nonLanguage STROOP task</a></li>
-</ul></li>
-<li><a href="#data-analysis-for-language-group">Data Analysis for Language Group</a>
-<ul>
-<li><a href="#linear-regression-model-for-language-backward">Linear regression model for language BACKWARD</a></li>
-<li><a href="#linear-regression-model-for-language-flanker">Linear regression model for language FLANKER</a></li>
-<li><a href="#linear-regression-model-for-language-stroop">Linear regression model for language STROOP</a></li>
-<li><a href="#histogram-to-observe-results">Histogram to observe results</a></li>
-</ul></li>
-<li><a href="#normalize-data">normalize data</a></li>
-<li><a href="#removing-1-data-45-which-may-be-an-outlier.-this-was-done-just-to-observe-if-it-would-result-in-a-difference-in-results.">Removing 1 data (45) which may be an outlier. This was done just to observe if it would result in a difference in results.</a></li>
-</ul>
-</div>
 
 <p>rm(list = ls(all.names = TRUE)) #clear R environment</p>
 <div id="load-libraries" class="section level1">
 <h1>Load libraries</h1>
-<pre class="r"><code>library(readr)
-library(ggplot2)
-library(GGally)
-library(speakr)
-library(dplyr)
-library(tidyverse)
-library(readr)
-library(plyr)
-library(stringi)
-library(purrr)
-library(broom)
-library(scatterplot3d)
+<p>#Analysis of all_data ## Tidy all_data all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward).Including the kbzo0 who was later removed.</p>
+<pre class="r"><code>#getwd() #check working directory
+#lm(stroop_correct ~ language + age + IQ)
 
-library(tidyr)
-library(readr)
-library(readxl)</code></pre>
-<p>#Analysis of all_data ## Tidy all_data all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward).</p>
-<pre class="r"><code>#Load working data
-all_data &lt;- read.csv(&quot;/Users/princesa/Desktop/diana/all_data.csv&quot;, header = TRUE)
+#lm(stroop_correct ~ language * age * IQ)
 
-#summary
-summary(all_data)</code></pre>
-<pre><code>##  participant             age       
-##  Length:58          Min.   :22.00  
-##  Class :character   1st Qu.:32.00  
-##  Mode  :character   Median :38.00  
-##                     Mean   :39.19  
-##                     3rd Qu.:47.00  
-##                     Max.   :59.00  
-##        IQ         backward_correct
-##  Min.   : 60.00   Min.   :0.000   
-##  1st Qu.: 96.25   1st Qu.:1.000   
-##  Median :107.00   Median :4.000   
-##  Mean   :108.09   Mean   :3.138   
-##  3rd Qu.:122.25   3rd Qu.:5.000   
-##  Max.   :146.00   Max.   :6.000   
-##  flanker_correct stroop_correct 
-##  Min.   : 0.00   Min.   : 0.00  
-##  1st Qu.:40.50   1st Qu.:38.00  
-##  Median :45.00   Median :39.00  
-##  Mean   :41.91   Mean   :36.83  
-##  3rd Qu.:47.00   3rd Qu.:40.00  
-##  Max.   :49.00   Max.   :40.00</code></pre>
-<pre class="r"><code>#separate groups: nonLanguage teachers and language teachers
-nonLanguage &lt;- all_data[1:36, ]
-language &lt;- all_data[37:58, ]
-
-nonLanguage$language = &quot;NonLanguage&quot;
-language$language = &quot;Language&quot;
-
-#adding column to indicate nonLanguage or language for each participant
-all_data = bind_rows(nonLanguage,language)</code></pre>
-<p>##Data Visualization of all participants with ggplot</p>
-<pre class="r"><code>#all_data plot
-ggplot(all_data, aes(x = age, y = IQ)) +
-  #geom_jitter(width = .2)
+#lm(stroop_correct~language_sum*age_z*iQ_q)</code></pre>
+<p>##Standardize Age and IQ</p>
+<pre class="r"><code>final_df = new_all_data %&gt;% mutate(group_language = if_else(language == &#39;NonLanguage&#39;,-1,1),
+            age_z = (age - mean(age)) / sd(age),
+            iq_z = (IQ - mean(IQ)) / sd(IQ))
+final_df</code></pre>
+<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct
+## 1        adnm2  36 128                5              45             39
+## 2        bjfc1  40 106                4              44             38
+## 3        buzt0  30 139                5              49             39
+## 4        bwat2  34 122                1              46             39
+## 5        cbky9  49 128                4              48             40
+## 6        cfug6  34  71                0              27              2
+## 7        dhnz3  22  89                5              31             35
+## 8        ejpg7  32  99                5              42             39
+## 9        fesx6  33 112                4              45             38
+## 10       fgrl2  54 125                1              35             39
+## 11       fjfm3  35 124                5              46             37
+## 12       hqlv9  43  84                4              48             40
+## 13       iwzp1  42  68                3              45             38
+## 14       jhoh9  48 118                4              48             40
+## 15       keta9  27 114                0              43             39
+## 16       kryd6  55  92                4              45             35
+## 17       mnwx7  27 108                5              46             40
+## 18       myyl9  27 107                1              38             38
+## 19       nvko1  22 122                5              44             38
+## 20       onbv9  50  97                3              42             38
+## 21       ottj9  38 129                6              47             38
+## 22       oucx8  47 104                0              29             39
+## 23       phww7  42 104                3              42             40
+## 24       pqvt6  29 111                0              48             38
+## 25       qeiy3  56  90                0              42             34
+## 26       qsry8  46 108                5              45             35
+## 27       rdix8  38  86                0              39             35
+## 28       ruvk3  35 125                3              46             38
+## 29       tlit0  47 104                4              46             40
+## 30       tyfi7  35  85                0              38             38
+## 31       vqpg1  44 121                5              46             40
+## 32       vvpq4  32 115                0              28             40
+## 33       wbje4  40 123                4              38             40
+## 34       wldp0  32  97                4              45             40
+## 35       wyks1  37 111                4              49             40
+## 36       yrtb9  30 124                4              46             38
+## 37    bi_ajli0  35  95                4              45             38
+## 38    bi_dckv1  30 104                4              49             38
+## 39    bi_dvyf7  58 104                5              37             39
+## 40    bi_evur7  42  94                0              40             34
+## 41    bi_giah0  23 101                5              44             39
+## 42    bi_igsy3  50 115                6              49             39
+## 43    bi_iizs0  25 104                5              47             40
+## 44    bi_jdyf0  34 109                4              29             39
+## 45    bi_khem3  26 109                6              48             39
+## 46    bi_kxzm6  27  84                0              43             30
+## 47    bi_nxqq4  56 105                4              47             36
+## 48    bi_qjrz9  43 104                5              45             40
+## 49    bi_rftj7  44  94                2              42             34
+## 50    bi_sgmf1  46 115                4              47             40
+## 51    bi_txmo8  51  87                0              28             38
+## 52    bi_vpgq2  33 105                4              48             40
+## 53    bi_wdfj3  31 103                3              43             40
+## 54    bi_wetx1  49 119                3              49             40
+## 55    bi_xcix4  50 100                0              45             31
+## 56    bi_ycdf0  50 118                5              49             39
+## 57    bi_zefa9  43 104                3              26             39
+##       language group_language       age_z        iq_z
+## 1  NonLanguage             -1 -0.29393535  1.46825014
+## 2  NonLanguage             -1  0.11975144 -0.02500669
+## 3  NonLanguage             -1 -0.91446553  2.21487856
+## 4  NonLanguage             -1 -0.50077874  1.06099828
+## 5  NonLanguage             -1  1.05054671  1.46825014
+## 6  NonLanguage             -1 -0.50077874 -2.40064257
+## 7  NonLanguage             -1 -1.74183910 -1.17888698
+## 8  NonLanguage             -1 -0.70762213 -0.50013387
+## 9  NonLanguage             -1 -0.60420044  0.38224517
+## 10 NonLanguage             -1  1.56765519  1.26462421
+## 11 NonLanguage             -1 -0.39735704  1.19674890
+## 12 NonLanguage             -1  0.43001653 -1.51826353
+## 13 NonLanguage             -1  0.32659483 -2.60426850
+## 14 NonLanguage             -1  0.94712501  0.78949704
+## 15 NonLanguage             -1 -1.22473062  0.51799579
+## 16 NonLanguage             -1  1.67107688 -0.97526104
+## 17 NonLanguage             -1 -1.22473062  0.11074393
+## 18 NonLanguage             -1 -1.22473062  0.04286862
+## 19 NonLanguage             -1 -1.74183910  1.06099828
+## 20 NonLanguage             -1  1.15396840 -0.63588449
+## 21 NonLanguage             -1 -0.08709195  1.53612545
+## 22 NonLanguage             -1  0.84370331 -0.16075731
+## 23 NonLanguage             -1  0.32659483 -0.16075731
+## 24 NonLanguage             -1 -1.01788722  0.31436986
+## 25 NonLanguage             -1  1.77449858 -1.11101166
+## 26 NonLanguage             -1  0.74028162  0.11074393
+## 27 NonLanguage             -1 -0.08709195 -1.38251291
+## 28 NonLanguage             -1 -0.39735704  1.26462421
+## 29 NonLanguage             -1  0.84370331 -0.16075731
+## 30 NonLanguage             -1 -0.39735704 -1.45038822
+## 31 NonLanguage             -1  0.53343822  0.99312297
+## 32 NonLanguage             -1 -0.70762213  0.58587110
+## 33 NonLanguage             -1  0.11975144  1.12887359
+## 34 NonLanguage             -1 -0.70762213 -0.63588449
+## 35 NonLanguage             -1 -0.19051365  0.31436986
+## 36 NonLanguage             -1 -0.91446553  1.19674890
+## 37    Language              1 -0.39735704 -0.77163511
+## 38    Language              1 -0.91446553 -0.16075731
+## 39    Language              1  1.98134197 -0.16075731
+## 40    Language              1  0.32659483 -0.83951042
+## 41    Language              1 -1.63841740 -0.36438325
+## 42    Language              1  1.15396840  0.58587110
+## 43    Language              1 -1.43157401 -0.16075731
+## 44    Language              1 -0.50077874  0.17861924
+## 45    Language              1 -1.32815231  0.17861924
+## 46    Language              1 -1.22473062 -1.51826353
+## 47    Language              1  1.77449858 -0.09288200
+## 48    Language              1  0.43001653 -0.16075731
+## 49    Language              1  0.53343822 -0.83951042
+## 50    Language              1  0.74028162  0.58587110
+## 51    Language              1  1.25739010 -1.31463760
+## 52    Language              1 -0.60420044 -0.09288200
+## 53    Language              1 -0.81104383 -0.22863263
+## 54    Language              1  1.05054671  0.85737235
+## 55    Language              1  1.15396840 -0.43225856
+## 56    Language              1  1.15396840  0.78949704
+## 57    Language              1  0.43001653 -0.16075731</code></pre>
+<p>##Plots</p>
+<pre class="r"><code>plot1 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = age_z, y=flanker_correct,color=factor(group_language))+
   geom_point(size = 1) +
-   ggtitle(&quot;Language Plot&quot;)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r"><code>  #geom_smooth(method = &quot;&quot;) +
-  #facet_grid(language~backward_correct)</code></pre>
+  ggtitle(&quot;Plot 1&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+plot2 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = age_z, y=stroop_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle(&quot;Plot 2&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+plot3 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = age_z, y=backward_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle(&quot;Plot 3&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+library(patchwork)
+plot1 + plot2 + plot3</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>plot_layout(ncol = 2)</code></pre>
+<pre><code>## $ncol
+## [1] 2
+## 
+## $nrow
+## NULL
+## 
+## $byrow
+## NULL
+## 
+## $widths
+## NULL
+## 
+## $heights
+## NULL
+## 
+## $guides
+## NULL
+## 
+## $tag_level
+## NULL
+## 
+## $design
+## NULL
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;plot_layout&quot;</code></pre>
+<pre class="r"><code>plot4 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = iq_z, y=flanker_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle(&quot;Plot 4&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+plot5 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = iq_z, y=stroop_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle(&quot;Plot 5&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+plot6 &lt;- final_df %&gt;% 
+  ggplot()+
+  aes(x = iq_z, y=backward_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle(&quot;Plot 6&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + 
+  labs(color = &quot;Language Group&quot;)+
+  scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
+
+library(patchwork)
+plot4 + plot5 + plot6</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>plot_layout(ncol = 2)</code></pre>
+<pre><code>## $ncol
+## [1] 2
+## 
+## $nrow
+## NULL
+## 
+## $byrow
+## NULL
+## 
+## $widths
+## NULL
+## 
+## $heights
+## NULL
+## 
+## $guides
+## NULL
+## 
+## $tag_level
+## NULL
+## 
+## $design
+## NULL
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;plot_layout&quot;</code></pre>
+<div id="background-questionnaire" class="section level2">
+<h2>Background Questionnaire</h2>
+<pre class="r"><code>background_survey &lt;- read.csv(&quot;~/Desktop/RStudio_QP/experiment_data/background_survey.csv&quot;, header = TRUE)</code></pre>
+<pre class="r"><code>str(background_survey)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    781 obs. of  11 variables:
+##  $ X                                                           : chr  &quot;nvko1&quot; &quot;yrtb9&quot; &quot;ejpg7&quot; &quot;vvpq4&quot; ...
+##  $ Please.enter.your.Prolific.ID...Participant.ID..or.full.name: chr  &quot;5ffc97615991d411f8ceff96&quot; &quot;5f22bdb732432502a2615f3f&quot; &quot;5fd4125ed9973916d62d9958&quot; &quot;5e483052a742a3000f7c15e8&quot; ...
+##  $ X.1                                                         : logi  NA NA NA NA NA NA ...
+##  $ Bilingual                                                   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Gender                                                      : chr  &quot;M&quot; &quot;F&quot; &quot;M&quot; &quot;F&quot; ...
+##  $ Residence                                                   : chr  &quot;USA&quot; &quot;USA&quot; &quot;USA&quot; &quot;USA&quot; ...
+##  $ Age                                                         : chr  &quot;22&quot; &quot;30&quot; &quot;32&quot; &quot;32&quot; ...
+##  $ Ethnicity                                                   : chr  &quot;White or Caucasian&quot; &quot;White or Caucasian&quot; &quot;Asian or Pacific Islander&quot; &quot;White or Caucasian&quot; ...
+##  $ Teaching_Level                                              : chr  &quot;9-12 grade&quot; &quot;6-8 grades&quot; &quot;9-12 grade&quot; &quot;9-12 grade&quot; ...
+##  $ Experience                                                  : chr  &quot;1-3 years&quot; &quot;7-10 years&quot; &quot;4-6 years&quot; &quot;7-10 years&quot; ...
+##  $ Languages                                                   : chr  NA NA NA NA ...</code></pre>
+<pre class="r"><code>background_survey$Age &lt;- as.numeric(background_survey$Age)</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>background_survey_1  &lt;- background_survey[1:57,] 
+background_survey_1</code></pre>
+<pre><code>##            X Please.enter.your.Prolific.ID...Participant.ID..or.full.name X.1
+## 1      nvko1                                     5ffc97615991d411f8ceff96  NA
+## 2      yrtb9                                     5f22bdb732432502a2615f3f  NA
+## 3      ejpg7                                     5fd4125ed9973916d62d9958  NA
+## 4      vvpq4                                     5e483052a742a3000f7c15e8  NA
+## 5      cfug6                                              Krystle matias   NA
+## 6      oucx8                                                        oucx8  NA
+## 7      ruvk3                                     5d82d28977546f00166ae702  NA
+## 8      myyl9                                                        myyl9  NA
+## 9      dhnz3                                                        dhnz3  NA
+## 10     bwat2                                     5621cf44ed6e5a000bc7efd1  NA
+## 11    ottj9                                                        ottj9   NA
+## 12     fjfm3                                     5c920f11be78b00001c82bf0  NA
+## 13     buzt0                                     5fd7c279955e160727234b05  NA
+## 14     wbje4                                     5a11f4d76924a60001eb7c1b  NA
+## 15     wyks1                                     5f5e33a37fa7566accb4e6ac  NA
+## 16     tyfi7                                     605cd2aefa163d506547bb2d  NA
+## 17     cbky9                                     5a9adf93dbdb470001eee5e1  NA
+## 18     rdix8                                     60478deac07fa7000b0f2f2e  NA
+## 19     pqvt6                                     5f919274b5383b00096b0295  NA
+## 20     iwzp1                                     600ad0fb206b70059718a0c5  NA
+## 21     hqlv9                                     5dc71b96d210e45213e92359  NA
+## 22     mnwx7                                     6036b303c9b72d01f7d46a5f  NA
+## 23     wldp0                                     5d8cef3c28e183001a335ab0  NA
+## 24     phww7                                     5bed3079fa1ac70001baa7ad  NA
+## 25     bjfc1                                     5e4b78037799c5082e147d5e  NA
+## 26     tlit0                                     5f582a0071a90f3972ee9a09  NA
+## 27     qeiy3                                     599a9252bbe848000179676e  NA
+## 28    onbv9                                                        onbv9   NA
+## 29     keta9                                     5d3587a13e11900001093ae8  NA
+## 30     kryd6                                     5cf806142780ca001a9d5cee  NA
+## 31     qsry8                                     5fa9392c0cc79c03b3f4eb58  NA
+## 32     jhoh9                                     5fc63e053cf83c06341ac94a  NA
+## 33     fgrl2                                     5fddf3f28ac1824a6fb56e29  NA
+## 34     fesx6                                     5f5f5013f947f6000bd8ddcb  NA
+## 35     adnm2                                     5ca73fe6bcdcc2001291822d  NA
+## 36     vqpg1                                     5af85368f856320001cf6b09  NA
+## 37 bi_zefa9                                                        zefa9   NA
+## 38  bi_dvyf7                                                        dvyf7  NA
+## 39  bi_evur7                                                        evur7  NA
+## 40  bi_xcix4                                                        xcix4  NA
+## 41  bi_iizs0                                     5d287dfb531d0a0018e9251c  NA
+## 42  bi_igsy3                                     5eb471789686d82c24661cb3  NA
+## 43  bi_jdyf0                                                        jdyf0  NA
+## 44  bi_txmo8                                     5e695632d40a492070942196  NA
+## 45  bi_wdfj3                                     5e37fef4d8843b000aeb1b8f  NA
+## 46  bi_sgmf1                                     5c60e5371115b4000140fb07  NA
+## 47  bi_giah0                                     5c6e26630c45820001b851d3  NA
+## 48  bi_ajli0                                                        ajli0  NA
+## 49  bi_khem3                                     5ec7d9910125920829519d00  NA
+## 50  bi_kxzm6                                                        kxzm6  NA
+## 51  bi_qjrz9                                     5fed41e3e14422f5e308c6e5  NA
+## 52  bi_dckv1                                     5366a3f1fdf99b66dd29912c  NA
+## 53  bi_rftj7                                     5c1d19c810677f0001d9d56c  NA
+## 54  bi_ycdf0                                     5d02c0e382e4f00001aa20cd  NA
+## 55  bi_nxqq4                                     6005f9ba9a21c96134362ff1  NA
+## 56  bi_vpgq2                                     5d4ba0be2fe36d00163e73db  NA
+## 57  bi_wetx1                                     5de25e3fce20cd28846a7d5b  NA
+##    Bilingual Gender      Residence Age                 Ethnicity
+## 1          0      M            USA  22        White or Caucasian
+## 2          0      F            USA  30        White or Caucasian
+## 3          0      M            USA  32 Asian or Pacific Islander
+## 4          0      F            USA  32        White or Caucasian
+## 5          0      F            USA  34        White or Caucasian
+## 6          0      M            USA  47        Hispanic or Latino
+## 7          0      F            USA  35 Asian or Pacific Islander
+## 8          0      F            USA  27        White or Caucasian
+## 9          0      F            USA  22        Hispanic or Latino
+## 10         0      M            USA  34        White or Caucasian
+## 11         0      M            USA  38   Multiracial or Biracial
+## 12         0      F            USA  35        White or Caucasian
+## 13         0      M         Mexico  30        Hispanic or Latino
+## 14         0      F United Kingdom  40        White or Caucasian
+## 15         0      F United Kingdom  37        White or Caucasian
+## 16         0      F   South Africa  35   Multiracial or Biracial
+## 17         0      F United Kingdom  49        White or Caucasian
+## 18         0      F   South Africa  38 Black or African American
+## 19         0      F United Kingdom  29                   turkish
+## 20         0      M   South Africa  42 Black or African American
+## 21         0      M United Kingdom  43        White or Caucasian
+## 22         0      M          Spain  27 Asian or Pacific Islander
+## 23         0      F United Kingdom  32        White or Caucasian
+## 24         0      M United Kingdom  42        White or Caucasian
+## 25         0      F United Kingdom  40 Black or African American
+## 26         0      M United Kingdom  47        White or Caucasian
+## 27         0      F United Kingdom  56        White or Caucasian
+## 28         0      F            USA  50        Hispanic or Latino
+## 29         0      F United Kingdom  27        White or Caucasian
+## 30         0      F United Kingdom  55        White or Caucasian
+## 31         0      F United Kingdom  46        White or Caucasian
+## 32         0      F United Kingdom  48        White or Caucasian
+## 33         0      M United Kingdom  54        White or Caucasian
+## 34         0      F          Spain  33        White or Caucasian
+## 35         0      F United Kingdom  36        White or Caucasian
+## 36         0      F United Kingdom  44        White or Caucasian
+## 37         1      F            USA  43 Asian or Pacific Islander
+## 38         1      F            USA  58        White or Caucasian
+## 39         1      F            USA  42        Hispanic or Latino
+## 40         1      F            USA  50        Hispanic or Latino
+## 41         1      F          Spain  25        White or Caucasian
+## 42         1      M         Mexico  50        Hispanic or Latino
+## 43         1      M            USA  34        White or Caucasian
+## 44         1      F United Kingdom  51        White or Caucasian
+## 45         1      F    Netherlands  31        White or Caucasian
+## 46         1      M         Mexico  46        White or Caucasian
+## 47         1      M         Mexico  23        Hispanic or Latino
+## 48         1      F            USA  35        Hispanic or Latino
+## 49         1      F            USA  26        Hispanic or Latino
+## 50         1      F            USA  27        Hispanic or Latino
+## 51         1      M            USA  43        White or Caucasian
+## 52         1      M United Kingdom  30        White or Caucasian
+## 53         1      M         Mexico  44        Hispanic or Latino
+## 54         1      F United Kingdom  50        White or Caucasian
+## 55         1      F United Kingdom  56        White or Caucasian
+## 56         1      M         Mexico  33        Hispanic or Latino
+## 57         1      M United Kingdom  49        White or Caucasian
+##        Teaching_Level  Experience                   Languages
+## 1          9-12 grade   1-3 years                        &lt;NA&gt;
+## 2          6-8 grades  7-10 years                        &lt;NA&gt;
+## 3          9-12 grade   4-6 years                        &lt;NA&gt;
+## 4          9-12 grade  7-10 years                        &lt;NA&gt;
+## 5          2nd  grade   4-6 years                        &lt;NA&gt;
+## 6          9-12 grade   16+ years                        &lt;NA&gt;
+## 7  College/University  7-10 years                        &lt;NA&gt;
+## 8        Kindergarten   4-6 years                        &lt;NA&gt;
+## 9        Kindergarten   1-3 years                        &lt;NA&gt;
+## 10 College/University   4-6 years                        &lt;NA&gt;
+## 11       Kindergarten  7-10 years                        &lt;NA&gt;
+## 12       Kindergarten   1-3 years                        &lt;NA&gt;
+## 13 College/University   4-6 years                        &lt;NA&gt;
+## 14          5th grade   16+ years                        &lt;NA&gt;
+## 15         9-12 grade 11-15 years                        &lt;NA&gt;
+## 16         grade 0-12   4-6 years                        &lt;NA&gt;
+## 17 College/University   16+ years                        &lt;NA&gt;
+## 18 College/University  7-10 years                        &lt;NA&gt;
+## 19 College/University   4-6 years                        &lt;NA&gt;
+## 20 College/University 11-15 years                        &lt;NA&gt;
+## 21         6-8 grades 11-15 years                        &lt;NA&gt;
+## 22 College/University   1-3 years                        &lt;NA&gt;
+## 23          3rd grade  7-10 years                        &lt;NA&gt;
+## 24 College/University 11-15 years                        &lt;NA&gt;
+## 25         9-12 grade   16+ years                        &lt;NA&gt;
+## 26 College/University   1-3 years                        &lt;NA&gt;
+## 27         9-12 grade   16+ years                        &lt;NA&gt;
+## 28       Kindergarten   16+ years                        &lt;NA&gt;
+## 29 College/University   1-3 years                        &lt;NA&gt;
+## 30 College/University   16+ years                        &lt;NA&gt;
+## 31 College/University   16+ years                        &lt;NA&gt;
+## 32          1st grade  7-10 years                        &lt;NA&gt;
+## 33         9-12 grade   16+ years                        &lt;NA&gt;
+## 34         6-8 grades 11-15 years                        &lt;NA&gt;
+## 35          4th grade   4-6 years                        &lt;NA&gt;
+## 36         9-12 grade   16+ years                        &lt;NA&gt;
+## 37         9-12 grade   16+ years                    Mandarin
+## 38         6-8 grades  7-10 years                     Spanish
+## 39         6-8 grades   4-6 years                     Spanish
+## 40         9-12 grade  7-10 years                     Spanish
+## 41         6-8 grades   1-3 years Spanish, Basque and English
+## 42          4th grade   16+ years                     Spanish
+## 43 College/University   4-6 years                     Spanish
+## 44          3rd grade   16+ years                      French
+## 45         6-8 grades  7-10 years                     English
+## 46         6-8 grades   16+ years                     English
+## 47 College/University   4-6 years                     English
+## 48       Kindergarten  7-10 years                     Spanish
+## 49         9-12 grade   1-3 years                     Spanish
+## 50         9-12 grade   4-6 years                     Spanish
+## 51         9-12 grade   16+ years                     Spanish
+## 52         2nd  grade  7-10 years                      French
+## 53         9-12 grade 11-15 years                     Spanish
+## 54         9-12 grade   16+ years                      French
+## 55         9-12 grade   16+ years                      French
+## 56          4th grade   1-3 years                     English
+## 57          5th grade 11-15 years                      German</code></pre>
+<pre class="r"><code>library(table1)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;table1&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     units, units&lt;-</code></pre>
+<pre class="r"><code>table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) </code></pre>
+<div class="Rtable1"><table class="Rtable1">
+<thead>
+<tr>
+<th class='rowlabel firstrow lastrow'></th>
+<th class='firstrow lastrow'><span class='stratlabel'>F<br><span class='stratn'>(N=36)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>M<br><span class='stratn'>(N=21)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(N=57)</span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class='rowlabel firstrow'>Bilingual</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>0.333 (0.478)</td>
+<td>0.429 (0.507)</td>
+<td>0.368 (0.487)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Age</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>39.0 (10.1)</td>
+<td>38.6 (9.17)</td>
+<td>38.8 (9.67)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>36.5 [22.0, 58.0]</td>
+<td class='lastrow'>42.0 [22.0, 54.0]</td>
+<td class='lastrow'>38.0 [22.0, 58.0]</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Ethnicity</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Asian or Pacific Islander</td>
+<td>2 (5.6%)</td>
+<td>2 (9.5%)</td>
+<td>4 (7.0%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Black or African American</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Hispanic or Latino</td>
+<td>7 (19.4%)</td>
+<td>6 (28.6%)</td>
+<td>13 (22.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Multiracial or Biracial</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>turkish</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>White or Caucasian</td>
+<td class='lastrow'>23 (63.9%)</td>
+<td class='lastrow'>11 (52.4%)</td>
+<td class='lastrow'>34 (59.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Experience</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>1-3 years</td>
+<td>5 (13.9%)</td>
+<td>4 (19.0%)</td>
+<td>9 (15.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>11-15 years</td>
+<td>2 (5.6%)</td>
+<td>5 (23.8%)</td>
+<td>7 (12.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>16+ years</td>
+<td>12 (33.3%)</td>
+<td>5 (23.8%)</td>
+<td>17 (29.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>4-6 years</td>
+<td>7 (19.4%)</td>
+<td>5 (23.8%)</td>
+<td>12 (21.1%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>7-10 years</td>
+<td class='lastrow'>10 (27.8%)</td>
+<td class='lastrow'>2 (9.5%)</td>
+<td class='lastrow'>12 (21.1%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = &quot;Rtable1-grid&quot;)</code></pre>
+<div class="Rtable1"><table class="Rtable1-grid">
+<thead>
+<tr>
+<th class='rowlabel firstrow lastrow'></th>
+<th class='firstrow lastrow'><span class='stratlabel'>F<br><span class='stratn'>(N=36)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>M<br><span class='stratn'>(N=21)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(N=57)</span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class='rowlabel firstrow'>Bilingual</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>0.333 (0.478)</td>
+<td>0.429 (0.507)</td>
+<td>0.368 (0.487)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Age</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>39.0 (10.1)</td>
+<td>38.6 (9.17)</td>
+<td>38.8 (9.67)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>36.5 [22.0, 58.0]</td>
+<td class='lastrow'>42.0 [22.0, 54.0]</td>
+<td class='lastrow'>38.0 [22.0, 58.0]</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Ethnicity</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Asian or Pacific Islander</td>
+<td>2 (5.6%)</td>
+<td>2 (9.5%)</td>
+<td>4 (7.0%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Black or African American</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Hispanic or Latino</td>
+<td>7 (19.4%)</td>
+<td>6 (28.6%)</td>
+<td>13 (22.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Multiracial or Biracial</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>turkish</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>White or Caucasian</td>
+<td class='lastrow'>23 (63.9%)</td>
+<td class='lastrow'>11 (52.4%)</td>
+<td class='lastrow'>34 (59.6%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>table1(~Bilingual + Residence + Teaching_Level + Experience | Gender , data = background_survey_1) </code></pre>
+<div class="Rtable1"><table class="Rtable1">
+<thead>
+<tr>
+<th class='rowlabel firstrow lastrow'></th>
+<th class='firstrow lastrow'><span class='stratlabel'>F<br><span class='stratn'>(N=36)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>M<br><span class='stratn'>(N=21)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(N=57)</span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class='rowlabel firstrow'>Bilingual</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>0.333 (0.478)</td>
+<td>0.429 (0.507)</td>
+<td>0.368 (0.487)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+<td class='lastrow'>0 [0, 1.00]</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Residence</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Netherlands</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>South Africa</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Spain</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>United Kingdom</td>
+<td>16 (44.4%)</td>
+<td>6 (28.6%)</td>
+<td>22 (38.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>USA</td>
+<td>15 (41.7%)</td>
+<td>7 (33.3%)</td>
+<td>22 (38.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Mexico</td>
+<td class='lastrow'>0 (0%)</td>
+<td class='lastrow'>6 (28.6%)</td>
+<td class='lastrow'>6 (10.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Teaching_Level</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>1st grade</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>2nd  grade</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>3rd grade</td>
+<td>2 (5.6%)</td>
+<td>0 (0%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>4th grade</td>
+<td>1 (2.8%)</td>
+<td>2 (9.5%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>5th grade</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>6-8 grades</td>
+<td>6 (16.7%)</td>
+<td>2 (9.5%)</td>
+<td>8 (14.0%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>9-12 grade</td>
+<td>11 (30.6%)</td>
+<td>6 (28.6%)</td>
+<td>17 (29.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>College/University</td>
+<td>7 (19.4%)</td>
+<td>8 (38.1%)</td>
+<td>15 (26.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>grade 0-12</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Kindergarten</td>
+<td class='lastrow'>5 (13.9%)</td>
+<td class='lastrow'>1 (4.8%)</td>
+<td class='lastrow'>6 (10.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Experience</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>1-3 years</td>
+<td>5 (13.9%)</td>
+<td>4 (19.0%)</td>
+<td>9 (15.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>11-15 years</td>
+<td>2 (5.6%)</td>
+<td>5 (23.8%)</td>
+<td>7 (12.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>16+ years</td>
+<td>12 (33.3%)</td>
+<td>5 (23.8%)</td>
+<td>17 (29.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>4-6 years</td>
+<td>7 (19.4%)</td>
+<td>5 (23.8%)</td>
+<td>12 (21.1%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>7-10 years</td>
+<td class='lastrow'>10 (27.8%)</td>
+<td class='lastrow'>2 (9.5%)</td>
+<td class='lastrow'>12 (21.1%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="analsyis-by-groups" class="section level1">
 <h1>Analsyis by groups</h1>
@@ -363,23 +1132,15 @@ ggplot(all_data, aes(x = age, y = IQ)) +
 <div id="linear-regression-model-for-nonlanguage-backward-task" class="section level2">
 <h2>Linear regression model for nonLanguage BACKWARD task</h2>
 <pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set
-## &#39;nonLanguage&#39; not found</code></pre>
+<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
 <pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct
-## 1       adnm2  36 135                5
-## 2       bjfc1  40 108                4
-## 3       buzt0  30 146                5
-## 4       bwat2  34 128                1
-## 5       cbky9  49 135                4
-## 6       cfug6  34  63                0
-##   flanker_correct stroop_correct
-## 1              45             39
-## 2              44             38
-## 3              49             39
-## 4              46             39
-## 5              48             40
-## 6              27              2
+<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
+## 1       adnm2  36 128                5              45             39
+## 2       bjfc1  40 106                4              44             38
+## 3       buzt0  30 139                5              49             39
+## 4       bwat2  34 122                1              46             39
+## 5       cbky9  49 128                4              48             40
+## 6       cfug6  34  71                0              27              2
 ##      language
 ## 1 NonLanguage
 ## 2 NonLanguage
@@ -389,7 +1150,7 @@ ggplot(all_data, aes(x = age, y = IQ)) +
 ## 6 NonLanguage</code></pre>
 <pre class="r"><code>##plot
 plot(backward_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 <pre class="r"><code>#linear model
 backward_model_nonLanguage &lt;- lm(backward_correct ~ age + IQ, data = nonLanguage)
 #abline(backward_model_nonLanguage)
@@ -397,13 +1158,11 @@ backward_model_nonLanguage &lt;- lm(backward_correct ~ age + IQ, data = nonLangu
 my_results &lt;- tidy(backward_model_nonLanguage)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term     estimate std.e…¹ stati…² p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interc… -0.194    2.35   -0.0828  0.934 
-## 2 age      -0.00622  0.0366 -0.170   0.866 
-## 3 IQ        0.0316   0.0154  2.05    0.0482
-## # … with abbreviated variable names
-## #   ¹​std.error, ²​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept) -1.04       2.67      -0.390  0.699 
+## 2 age         -0.00564    0.0366    -0.154  0.878 
+## 3 IQ           0.0399     0.0193     2.06   0.0469</code></pre>
 <pre class="r"><code>backward_model_nonLanguage</code></pre>
 <pre><code>## 
 ## Call:
@@ -411,7 +1170,7 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##   -0.194378    -0.006223     0.031591</code></pre>
+##   -1.042424    -0.005639     0.039908</code></pre>
 <pre class="r"><code>summary(backward_model_nonLanguage)</code></pre>
 <pre><code>## 
 ## Call:
@@ -419,53 +1178,39 @@ my_results</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.3658 -2.0974  0.6713  1.3846  2.6145 
+## -3.3665 -2.0947  0.6342  1.3793  2.6147 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value
-## (Intercept) -0.194378   2.346418  -0.083
-## age         -0.006223   0.036562  -0.170
-## IQ           0.031591   0.015400   2.051
-##             Pr(&gt;|t|)  
-## (Intercept)   0.9345  
-## age           0.8659  
-## IQ            0.0482 *
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -1.042424   2.674695  -0.390   0.6992  
+## age         -0.005639   0.036568  -0.154   0.8784  
+## IQ           0.039908   0.019329   2.065   0.0469 *
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.934 on 33 degrees of freedom
-## Multiple R-squared:  0.1174, Adjusted R-squared:  0.06393 
-## F-statistic: 2.195 on 2 and 33 DF,  p-value: 0.1273</code></pre>
+## Residual standard error: 1.933 on 33 degrees of freedom
+## Multiple R-squared:  0.1187, Adjusted R-squared:  0.0653 
+## F-statistic: 2.222 on 2 and 33 DF,  p-value: 0.1243</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(backward_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
 <pre class="r"><code>AIC(backward_model_nonLanguage)</code></pre>
-<pre><code>## [1] 154.5309</code></pre>
+<pre><code>## [1] 154.4783</code></pre>
 <pre class="r"><code>BIC(backward_model_nonLanguage)</code></pre>
-<pre><code>## [1] 160.865</code></pre>
+<pre><code>## [1] 160.8124</code></pre>
 </div>
 <div id="linear-regression-model-for-nonlanguage-flanker-task" class="section level2">
 <h2>Linear regression model for nonLanguage FLANKER task</h2>
 <pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set
-## &#39;nonLanguage&#39; not found</code></pre>
+<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
 <pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct
-## 1       adnm2  36 135                5
-## 2       bjfc1  40 108                4
-## 3       buzt0  30 146                5
-## 4       bwat2  34 128                1
-## 5       cbky9  49 135                4
-## 6       cfug6  34  63                0
-##   flanker_correct stroop_correct
-## 1              45             39
-## 2              44             38
-## 3              49             39
-## 4              46             39
-## 5              48             40
-## 6              27              2
+<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
+## 1       adnm2  36 128                5              45             39
+## 2       bjfc1  40 106                4              44             38
+## 3       buzt0  30 139                5              49             39
+## 4       bwat2  34 122                1              46             39
+## 5       cbky9  49 128                4              48             40
+## 6       cfug6  34  71                0              27              2
 ##      language
 ## 1 NonLanguage
 ## 2 NonLanguage
@@ -475,7 +1220,7 @@ plot(backward_model_nonLanguage) </code></pre>
 ## 6 NonLanguage</code></pre>
 <pre class="r"><code>##plot
 plot(flanker_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 <pre class="r"><code>#linear model
 flanker_model_nonLanguage &lt;- lm(flanker_correct ~ age + IQ, data = nonLanguage)
 #abline(flanker_model_nonLanguage)
@@ -483,13 +1228,11 @@ flanker_model_nonLanguage &lt;- lm(flanker_correct ~ age + IQ, data = nonLanguag
 my_results &lt;- tidy(flanker_model_nonLanguage)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce… 28.1     6.91     4.07  2.78e-4
-## 2 age        0.0766  0.108    0.711 4.82e-1
-## 3 IQ         0.104   0.0454   2.30  2.82e-2
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  25.3       7.88       3.21  0.00294
+## 2 age           0.0786    0.108      0.730 0.471  
+## 3 IQ            0.132     0.0569     2.32  0.0269</code></pre>
 <pre class="r"><code>flanker_model_nonLanguage</code></pre>
 <pre><code>## 
 ## Call:
@@ -497,63 +1240,47 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##    28.11861      0.07663      0.10418</code></pre>
+##    25.29453      0.07861      0.13184</code></pre>
 <pre class="r"><code>summary(flanker_model_nonLanguage)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = flanker_correct ~ age + IQ, data = nonLanguage)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q 
-## -14.9680  -0.4283   1.4999   3.2503 
-##      Max 
-##   8.2520 
+##      Min       1Q   Median       3Q      Max 
+## -14.9716  -0.3857   1.5301   3.0792   8.2506 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 28.11861    6.91314   4.067
-## age          0.07663    0.10772   0.711
-## IQ           0.10418    0.04537   2.296
-##             Pr(&gt;|t|)    
-## (Intercept) 0.000278 ***
-## age         0.481859    
-## IQ          0.028156 *  
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 25.29453    7.87660   3.211  0.00294 **
+## age          0.07861    0.10769   0.730  0.47054   
+## IQ           0.13184    0.05692   2.316  0.02691 * 
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 5.699 on 33 degrees of freedom
-## Multiple R-squared:  0.1419, Adjusted R-squared:  0.08992 
-## F-statistic: 2.729 on 2 and 33 DF,  p-value: 0.08002</code></pre>
+## Residual standard error: 5.692 on 33 degrees of freedom
+## Multiple R-squared:  0.144,  Adjusted R-squared:  0.09211 
+## F-statistic: 2.775 on 2 and 33 DF,  p-value: 0.0769</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(flanker_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 <pre class="r"><code>AIC(flanker_model_nonLanguage)</code></pre>
-<pre><code>## [1] 232.3294</code></pre>
+<pre><code>## [1] 232.2427</code></pre>
 <pre class="r"><code>BIC(flanker_model_nonLanguage)</code></pre>
-<pre><code>## [1] 238.6635</code></pre>
+<pre><code>## [1] 238.5768</code></pre>
 </div>
 <div id="linear-regression-model-for-nonlanguage-stroop-task" class="section level2">
 <h2>Linear regression model for nonLanguage STROOP task</h2>
 <pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set
-## &#39;nonLanguage&#39; not found</code></pre>
+<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
 <pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct
-## 1       adnm2  36 135                5
-## 2       bjfc1  40 108                4
-## 3       buzt0  30 146                5
-## 4       bwat2  34 128                1
-## 5       cbky9  49 135                4
-## 6       cfug6  34  63                0
-##   flanker_correct stroop_correct
-## 1              45             39
-## 2              44             38
-## 3              49             39
-## 4              46             39
-## 5              48             40
-## 6              27              2
+<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
+## 1       adnm2  36 128                5              45             39
+## 2       bjfc1  40 106                4              44             38
+## 3       buzt0  30 139                5              49             39
+## 4       bwat2  34 122                1              46             39
+## 5       cbky9  49 128                4              48             40
+## 6       cfug6  34  71                0              27              2
 ##      language
 ## 1 NonLanguage
 ## 2 NonLanguage
@@ -563,25 +1290,21 @@ plot(flanker_model_nonLanguage) </code></pre>
 ## 6 NonLanguage</code></pre>
 <pre class="r"><code>##plot
 plot(stroop_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>#linear model
 stroop_model_nonLanguage &lt;- lm(stroop_correct ~ age + IQ, data = nonLanguage)
 abline(stroop_model_nonLanguage)</code></pre>
-<pre><code>## Warning in
-## abline(stroop_model_nonLanguage): only
-## using the first two of 3 regression
-## coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre><code>## Warning in abline(stroop_model_nonLanguage): only using the first two of 3
+## regression coefficients</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <pre class="r"><code>my_results &lt;- tidy(stroop_model_nonLanguage)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce… 19.4     6.94     2.79  0.00863
-## 2 age        0.0714  0.108    0.660 0.514  
-## 3 IQ         0.138   0.0456   3.03  0.00474
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  16.1       7.95       2.03  0.0509 
+## 2 age           0.0731    0.109      0.672 0.506  
+## 3 IQ            0.171     0.0575     2.97  0.00551</code></pre>
 <pre class="r"><code>stroop_model_nonLanguage</code></pre>
 <pre><code>## 
 ## Call:
@@ -589,42 +1312,34 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##    19.38713      0.07142      0.13802</code></pre>
+##    16.10915      0.07307      0.17072</code></pre>
 <pre class="r"><code>summary(stroop_model_nonLanguage)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = stroop_correct ~ age + IQ, data = nonLanguage)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q 
-## -28.5108  -1.5472   0.5263   2.1878 
-##      Max 
-##   7.3319 
+##      Min       1Q   Median       3Q      Max 
+## -28.7149  -1.5481   0.5901   2.1260   7.2127 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 19.38713    6.94219   2.793
-## age          0.07142    0.10817   0.660
-## IQ           0.13802    0.04556   3.029
-##             Pr(&gt;|t|)   
-## (Intercept)  0.00863 **
-## age          0.51370   
-## IQ           0.00474 **
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 16.10915    7.95253   2.026  0.05095 . 
+## age          0.07307    0.10873   0.672  0.50621   
+## IQ           0.17072    0.05747   2.971  0.00551 **
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 5.723 on 33 degrees of freedom
-## Multiple R-squared:  0.2191, Adjusted R-squared:  0.1718 
-## F-statistic:  4.63 on 2 and 33 DF,  p-value: 0.01689</code></pre>
+## Residual standard error: 5.747 on 33 degrees of freedom
+## Multiple R-squared:  0.2125, Adjusted R-squared:  0.1648 
+## F-statistic: 4.453 on 2 and 33 DF,  p-value: 0.0194</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(stroop_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
 <pre class="r"><code>AIC(stroop_model_nonLanguage)</code></pre>
-<pre><code>## [1] 232.6312</code></pre>
+<pre><code>## [1] 232.9334</code></pre>
 <pre class="r"><code>BIC(stroop_model_nonLanguage)</code></pre>
-<pre><code>## [1] 238.9653</code></pre>
+<pre><code>## [1] 239.2675</code></pre>
 </div>
 </div>
 <div id="data-analysis-for-language-group" class="section level1 tabset">
@@ -633,43 +1348,32 @@ plot(stroop_model_nonLanguage) </code></pre>
 <div id="linear-regression-model-for-language-backward" class="section level2">
 <h2>Linear regression model for language BACKWARD</h2>
 <pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set
-## &#39;language&#39; not found</code></pre>
+<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
 <pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct
-## 37    bi_ajli0  35  94                4
-## 38    bi_dckv1  30 105                4
-## 39    bi_dvyf7  58 105                5
-## 40    bi_evur7  42  93                0
-## 41    bi_giah0  23 102                5
-## 42    bi_igsy3  50 120                6
-##    flanker_correct stroop_correct language
-## 37              45             38 Language
-## 38              49             38 Language
-## 39              37             39 Language
-## 40              40             34 Language
-## 41              44             39 Language
-## 42              49             39 Language</code></pre>
+<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
+## 37    bi_ajli0  35  95                4              45             38 Language
+## 38    bi_dckv1  30 104                4              49             38 Language
+## 39    bi_dvyf7  58 104                5              37             39 Language
+## 40    bi_evur7  42  94                0              40             34 Language
+## 41    bi_giah0  23 101                5              44             39 Language
+## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
 <pre class="r"><code>#plot Language
 plot(backward_correct ~ age + IQ, data = language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <pre class="r"><code>#linear model
 backward_model_language &lt;- lm(backward_correct ~ age + IQ, data = language)
 abline(backward_model_language)</code></pre>
-<pre><code>## Warning in abline(backward_model_language):
-## only using the first two of 3 regression
-## coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<pre><code>## Warning in abline(backward_model_language): only using the first two of 3
+## regression coefficients</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
 <pre class="r"><code>my_results &lt;- tidy(backward_model_language)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce… -7.69    2.80     -2.75 1.28e-2
-## 2 age       -0.0609  0.0269   -2.27 3.52e-2
-## 3 IQ         0.129   0.0258    5.00 7.95e-5
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) -10.8       3.52       -3.07 0.00666 
+## 2 age          -0.0545    0.0296     -1.84 0.0824  
+## 3 IQ            0.159     0.0346      4.59 0.000226</code></pre>
 <pre class="r"><code>backward_model_language</code></pre>
 <pre><code>## 
 ## Call:
@@ -677,83 +1381,64 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##    -7.69311     -0.06092      0.12908</code></pre>
+##   -10.80609     -0.05447      0.15877</code></pre>
 <pre class="r"><code>summary(backward_model_language)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = backward_correct ~ age + IQ, data = language)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q 
-## -2.32845 -0.81186 -0.07596  0.90055 
-##      Max 
-##  2.67241 
+##      Min       1Q   Median       3Q      Max 
+## -2.41863 -0.85879 -0.07204  1.02296  2.45323 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) -7.69311    2.79829  -2.749
-## age         -0.06092    0.02687  -2.267
-## IQ           0.12908    0.02582   5.000
-##             Pr(&gt;|t|)    
-## (Intercept)   0.0128 *  
-## age           0.0352 *  
-## IQ          7.95e-05 ***
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -10.80609    3.52468  -3.066 0.006658 ** 
+## age          -0.05447    0.02961  -1.839 0.082403 .  
+## IQ            0.15877    0.03457   4.592 0.000226 ***
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.375 on 19 degrees of freedom
-## Multiple R-squared:  0.5937, Adjusted R-squared:  0.5509 
-## F-statistic: 13.88 on 2 and 19 DF,  p-value: 0.0001923</code></pre>
+## Residual standard error: 1.392 on 18 degrees of freedom
+## Multiple R-squared:  0.5477, Adjusted R-squared:  0.4975 
+## F-statistic:  10.9 on 2 and 18 DF,  p-value: 0.0007918</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(backward_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
 <pre class="r"><code>AIC(backward_model_language)</code></pre>
-<pre><code>## [1] 81.20737</code></pre>
+<pre><code>## [1] 78.25649</code></pre>
 <pre class="r"><code>BIC(backward_model_language)</code></pre>
-<pre><code>## [1] 85.57154</code></pre>
+<pre><code>## [1] 82.43458</code></pre>
 </div>
 <div id="linear-regression-model-for-language-flanker" class="section level2">
 <h2>Linear regression model for language FLANKER</h2>
 <pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set
-## &#39;language&#39; not found</code></pre>
+<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
 <pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct
-## 37    bi_ajli0  35  94                4
-## 38    bi_dckv1  30 105                4
-## 39    bi_dvyf7  58 105                5
-## 40    bi_evur7  42  93                0
-## 41    bi_giah0  23 102                5
-## 42    bi_igsy3  50 120                6
-##    flanker_correct stroop_correct language
-## 37              45             38 Language
-## 38              49             38 Language
-## 39              37             39 Language
-## 40              40             34 Language
-## 41              44             39 Language
-## 42              49             39 Language</code></pre>
+<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
+## 37    bi_ajli0  35  95                4              45             38 Language
+## 38    bi_dckv1  30 104                4              49             38 Language
+## 39    bi_dvyf7  58 104                5              37             39 Language
+## 40    bi_evur7  42  94                0              40             34 Language
+## 41    bi_giah0  23 101                5              44             39 Language
+## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
 <pre class="r"><code>#plot Language
 plot(flanker_correct ~ age + IQ, data = language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <pre class="r"><code>#linear model
 flanker_model_language &lt;- lm(flanker_correct ~ age + IQ, data = language)
 abline(flanker_model_language)</code></pre>
-<pre><code>## Warning in abline(flanker_model_language):
-## only using the first two of 3 regression
-## coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<pre><code>## Warning in abline(flanker_model_language): only using the first two of 3
+## regression coefficients</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
 <pre class="r"><code>my_results &lt;- tidy(flanker_model_language)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce…  12.1    20.1     0.605  0.552 
-## 2 age        -0.425   0.193  -2.21   0.0399
-## 3 IQ          0.443   0.185   2.39   0.0271
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)   13.9      16.9       0.821  0.422 
+## 2 age           -0.156     0.142    -1.10   0.285 
+## 3 IQ             0.341     0.166     2.06   0.0546</code></pre>
 <pre class="r"><code>flanker_model_language</code></pre>
 <pre><code>## 
 ## Call:
@@ -761,61 +1446,47 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##     12.1411      -0.4251       0.4432</code></pre>
+##     13.8765      -0.1564       0.3410</code></pre>
 <pre class="r"><code>summary(flanker_model_language)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = flanker_correct ~ age + IQ, data = language)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -28.278  -1.917   2.854   4.847  11.242 
+##      Min       1Q   Median       3Q      Max 
+## -16.7238  -0.7166   2.2128   3.7331   6.0813 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  12.1411    20.0687   0.605
-## age          -0.4251     0.1927  -2.207
-## IQ            0.4432     0.1851   2.394
-##             Pr(&gt;|t|)  
-## (Intercept)   0.5523  
-## age           0.0399 *
-## IQ            0.0271 *
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  13.8765    16.9043   0.821   0.4224  
+## age          -0.1564     0.1420  -1.101   0.2853  
+## IQ            0.3410     0.1658   2.056   0.0546 .
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 9.858 on 19 degrees of freedom
-## Multiple R-squared:  0.3319, Adjusted R-squared:  0.2616 
-## F-statistic: 4.719 on 2 and 19 DF,  p-value: 0.02168</code></pre>
+## Residual standard error: 6.677 on 18 degrees of freedom
+## Multiple R-squared:  0.2059, Adjusted R-squared:  0.1176 
+## F-statistic: 2.333 on 2 and 18 DF,  p-value: 0.1256</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(flanker_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
 <pre class="r"><code>AIC(flanker_model_language)</code></pre>
-<pre><code>## [1] 167.8941</code></pre>
+<pre><code>## [1] 144.1031</code></pre>
 <pre class="r"><code>BIC(flanker_model_language)</code></pre>
-<pre><code>## [1] 172.2582</code></pre>
+<pre><code>## [1] 148.2812</code></pre>
 </div>
 <div id="linear-regression-model-for-language-stroop" class="section level2">
 <h2>Linear regression model for language STROOP</h2>
 <pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set
-## &#39;language&#39; not found</code></pre>
+<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
 <pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct
-## 37    bi_ajli0  35  94                4
-## 38    bi_dckv1  30 105                4
-## 39    bi_dvyf7  58 105                5
-## 40    bi_evur7  42  93                0
-## 41    bi_giah0  23 102                5
-## 42    bi_igsy3  50 120                6
-##    flanker_correct stroop_correct language
-## 37              45             38 Language
-## 38              49             38 Language
-## 39              37             39 Language
-## 40              40             34 Language
-## 41              44             39 Language
-## 42              49             39 Language</code></pre>
+<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
+## 37    bi_ajli0  35  95                4              45             38 Language
+## 38    bi_dckv1  30 104                4              49             38 Language
+## 39    bi_dvyf7  58 104                5              37             39 Language
+## 40    bi_evur7  42  94                0              40             34 Language
+## 41    bi_giah0  23 101                5              44             39 Language
+## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
 <pre class="r"><code>#plot Language
 par(mfrow = c(2,2))
 plot(stroop_correct ~ age + IQ, data = language, pch=16)
@@ -824,19 +1495,17 @@ plot(stroop_correct ~ age + IQ, data = language, pch=16)
 stroop_model_language &lt;- lm(stroop_correct ~ age + IQ, data = language)
 
 par(mfrow = c(2,2))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <pre class="r"><code>plot(stroop_model_language)
 
 my_results &lt;- tidy(stroop_model_language)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce…  13.6    14.9     0.914  0.372 
-## 2 age        -0.313   0.143  -2.18   0.0417
-## 3 IQ          0.338   0.138   2.45   0.0240
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  17.5       5.96        2.93 0.00894
+## 2 age          -0.0597    0.0501     -1.19 0.249  
+## 3 IQ            0.219     0.0585      3.74 0.00149</code></pre>
 <pre class="r"><code>stroop_model_language</code></pre>
 <pre><code>## 
 ## Call:
@@ -844,119 +1513,70 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##     13.6334      -0.3127       0.3376</code></pre>
+##    17.47389     -0.05973      0.21886</code></pre>
 <pre class="r"><code>summary(stroop_model_language)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = stroop_correct ~ age + IQ, data = language)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q 
-## -26.5774  -1.6728   0.3679   2.9557 
-##      Max 
-##  11.9590 
+##     Min      1Q  Median      3Q     Max 
+## -5.3732 -1.1091 -0.2987  1.5170  4.5317 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  13.6334    14.9160   0.914
-## age          -0.3127     0.1432  -2.184
-## IQ            0.3376     0.1376   2.453
-##             Pr(&gt;|t|)  
-## (Intercept)   0.3722  
-## age           0.0417 *
-## IQ            0.0240 *
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 17.47389    5.96264   2.931  0.00894 **
+## age         -0.05973    0.05010  -1.192  0.24862   
+## IQ           0.21886    0.05849   3.742  0.00149 **
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 7.327 on 19 degrees of freedom
-## Multiple R-squared:  0.3359, Adjusted R-squared:  0.266 
-## F-statistic: 4.805 on 2 and 19 DF,  p-value: 0.02048</code></pre>
+## Residual standard error: 2.355 on 18 degrees of freedom
+## Multiple R-squared:   0.44,  Adjusted R-squared:  0.3777 
+## F-statistic:  7.07 on 2 and 18 DF,  p-value: 0.00542</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(stroop_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <pre class="r"><code>AIC(stroop_model_language)</code></pre>
-<pre><code>## [1] 154.8383</code></pre>
+<pre><code>## [1] 100.3369</code></pre>
 <pre class="r"><code>BIC(stroop_model_language)</code></pre>
-<pre><code>## [1] 159.2025</code></pre>
+<pre><code>## [1] 104.5149</code></pre>
 <p>#ADDITIONAL ANALYSIS</p>
 </div>
 <div id="histogram-to-observe-results" class="section level2">
 <h2>Histogram to observe results</h2>
-<pre class="r"><code>attach(all_data) #using objects in df all_data</code></pre>
-<pre><code>## The following object is masked _by_ .GlobalEnv:
-## 
-##     language</code></pre>
-<pre><code>## The following objects are masked from all_data (pos = 3):
-## 
-##     age, backward_correct,
-##     flanker_correct, IQ, language,
-##     participant, stroop_correct</code></pre>
-<pre><code>## The following objects are masked from all_data (pos = 4):
-## 
-##     age, backward_correct,
-##     flanker_correct, IQ, language,
-##     participant, stroop_correct</code></pre>
-<pre class="r"><code>hist(backward_correct) #this could be considered &quot;normal&quot;</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>attach(all_data) #using objects in df all_data
+hist(backward_correct) #this could be considered &quot;normal&quot;</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <pre class="r"><code>hist(flanker_correct) #not normal</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
 <pre class="r"><code>hist(stroop_correct) #not normal</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-3.png" width="672" /></p>
 <pre class="r"><code>summary(all_data)</code></pre>
-<pre><code>##  participant             age       
-##  Length:58          Min.   :22.00  
-##  Class :character   1st Qu.:32.00  
-##  Mode  :character   Median :38.00  
-##                     Mean   :39.19  
-##                     3rd Qu.:47.00  
-##                     Max.   :59.00  
-##        IQ         backward_correct
-##  Min.   : 60.00   Min.   :0.000   
-##  1st Qu.: 96.25   1st Qu.:1.000   
-##  Median :107.00   Median :4.000   
-##  Mean   :108.09   Mean   :3.138   
-##  3rd Qu.:122.25   3rd Qu.:5.000   
-##  Max.   :146.00   Max.   :6.000   
+<pre><code>##  participant             age              IQ        backward_correct
+##  Length:58          Min.   :22.00   Min.   : 68.0   Min.   :0.000   
+##  Class :character   1st Qu.:32.00   1st Qu.: 97.0   1st Qu.:1.000   
+##  Mode  :character   Median :38.00   Median :105.0   Median :4.000   
+##                     Mean   :39.19   Mean   :106.2   Mean   :3.138   
+##                     3rd Qu.:47.00   3rd Qu.:117.2   3rd Qu.:5.000   
+##                     Max.   :59.00   Max.   :139.0   Max.   :6.000   
 ##  flanker_correct stroop_correct 
 ##  Min.   : 0.00   Min.   : 0.00  
 ##  1st Qu.:40.50   1st Qu.:38.00  
 ##  Median :45.00   Median :39.00  
 ##  Mean   :41.91   Mean   :36.83  
 ##  3rd Qu.:47.00   3rd Qu.:40.00  
-##  Max.   :49.00   Max.   :40.00  
-##    language        
-##  Length:58         
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## </code></pre>
+##  Max.   :49.00   Max.   :40.00</code></pre>
 </div>
 </div>
 <div id="normalize-data" class="section level1">
 <h1>normalize data</h1>
 <p>Attempted to normalize data to see if it would make a difference.</p>
 <pre class="r"><code>attach(all_data)</code></pre>
-<pre><code>## The following object is masked _by_ .GlobalEnv:
-## 
-##     language</code></pre>
 <pre><code>## The following objects are masked from all_data (pos = 3):
 ## 
-##     age, backward_correct,
-##     flanker_correct, IQ, language,
-##     participant, stroop_correct</code></pre>
-<pre><code>## The following objects are masked from all_data (pos = 4):
-## 
-##     age, backward_correct,
-##     flanker_correct, IQ, language,
-##     participant, stroop_correct</code></pre>
-<pre><code>## The following objects are masked from all_data (pos = 5):
-## 
-##     age, backward_correct,
-##     flanker_correct, IQ, language,
-##     participant, stroop_correct</code></pre>
+##     age, backward_correct, flanker_correct, IQ, participant,
+##     stroop_correct</code></pre>
 <pre class="r"><code>scaledflank &lt;- scale(flanker_correct)
 scaledstroop &lt;- scale(stroop_correct)
 scaledback &lt;- scale(backward_correct)
@@ -969,27 +1589,27 @@ data &lt;- data.frame(age,IQ,scaledflank,scaledstroop,scaledback,biling)
 #colnames(data)=c(&quot;age&quot;,&quot;IQ&quot;,&quot;scaledflank&quot;,&quot;scaledstroop&quot;,&quot;scaledback&quot;,&quot;biling&quot;) #not needed but may use later
 
 hist(scaledback)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <pre class="r"><code>hist(scaledstroop)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
 <pre class="r"><code>hist(scaledflank)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
 <p>#——————————————## TESTING Additional plots</p>
 <pre class="r"><code>ggplot(data = all_data) +
   geom_point(mapping = aes(x = backward_correct, y = IQ, color = age))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>scatterplot3d(
   all_data[1:4], pch = 19, color = &quot;steelblue&quot;,
   grid = TRUE, box = FALSE,
   mar = c(3, 3, 0.5, 3)
 )</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
 <pre class="r"><code># nonLanguage Scatterplot
 ggplot(nonLanguage, aes(backward_correct, IQ)) +
   geom_point(fill = &quot;dark green&quot;, color = &quot;black&quot;,
              size = 5, shape = 21) +
   ggtitle(&quot;LanguagePlot&quot;)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-3.png" width="672" /></p>
 <p>#————————————————————————#</p>
 </div>
 <div id="removing-1-data-45-which-may-be-an-outlier.-this-was-done-just-to-observe-if-it-would-result-in-a-difference-in-results." class="section level1">
@@ -1004,24 +1624,21 @@ new_language &lt;- new_all_data[37:58, ]
 
 #plot Language
 plot(flanker_correct ~ age + IQ, data = new_language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>#linear model
 flanker_model_language &lt;- lm(flanker_correct ~ age + IQ, data = new_language)
 abline(flanker_model_language)</code></pre>
-<pre><code>## Warning in abline(flanker_model_language):
-## only using the first two of 3 regression
-## coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<pre><code>## Warning in abline(flanker_model_language): only using the first two of 3
+## regression coefficients</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
 <pre class="r"><code>my_results &lt;- tidy(flanker_model_language)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce…  21.2    13.8      1.54  0.141 
-## 2 age        -0.155   0.142   -1.09  0.290 
-## 3 IQ          0.266   0.131    2.03  0.0573
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)   13.9      16.9       0.821  0.422 
+## 2 age           -0.156     0.142    -1.10   0.285 
+## 3 IQ             0.341     0.166     2.06   0.0546</code></pre>
 <pre class="r"><code>flanker_model_language</code></pre>
 <pre><code>## 
 ## Call:
@@ -1029,39 +1646,31 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##     21.2068      -0.1552       0.2660</code></pre>
+##     13.8765      -0.1564       0.3410</code></pre>
 <pre class="r"><code>summary(flanker_model_language)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = flanker_correct ~ age + IQ, data = new_language)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q 
-## -16.7273  -0.7667   2.4163   3.6353 
-##      Max 
-##   6.0239 
+##      Min       1Q   Median       3Q      Max 
+## -16.7238  -0.7166   2.2128   3.7331   6.0813 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept)  21.2068    13.7539   1.542
-## age          -0.1552     0.1423  -1.090
-## IQ            0.2660     0.1310   2.031
-##             Pr(&gt;|t|)  
-## (Intercept)   0.1405  
-## age           0.2899  
-## IQ            0.0573 .
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  13.8765    16.9043   0.821   0.4224  
+## age          -0.1564     0.1420  -1.101   0.2853  
+## IQ            0.3410     0.1658   2.056   0.0546 .
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 6.693 on 18 degrees of freedom
+## Residual standard error: 6.677 on 18 degrees of freedom
 ##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.2021, Adjusted R-squared:  0.1135 
-## F-statistic:  2.28 on 2 and 18 DF,  p-value: 0.131</code></pre>
+## Multiple R-squared:  0.2059, Adjusted R-squared:  0.1176 
+## F-statistic: 2.333 on 2 and 18 DF,  p-value: 0.1256</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(flanker_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-3.png" width="672" /></p>
 <pre class="r"><code>##
 #plot Language
 par(mfrow = c(2,2))
@@ -1071,19 +1680,17 @@ plot(stroop_correct ~ age + IQ, data = new_language, pch=16)
 stroop_model_language &lt;- lm(stroop_correct ~ age + IQ, data = new_language)
 
 par(mfrow = c(2,2))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-4.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-4.png" width="672" /></p>
 <pre class="r"><code>plot(stroop_model_language)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-5.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-5.png" width="672" /></p>
 <pre class="r"><code>my_results &lt;- tidy(stroop_model_language)
 my_results</code></pre>
 <pre><code>## # A tibble: 3 × 5
-##   term      estim…¹ std.e…² stati…³ p.value
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Interce… 22.2     4.87      4.55 2.50e-4
-## 2 age       -0.0590  0.0504   -1.17 2.57e-1
-## 3 IQ         0.171   0.0464    3.69 1.69e-3
-## # … with abbreviated variable names
-## #   ¹​estimate, ²​std.error, ³​statistic</code></pre>
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  17.5       5.96        2.93 0.00894
+## 2 age          -0.0597    0.0501     -1.19 0.249  
+## 3 IQ            0.219     0.0585      3.74 0.00149</code></pre>
 <pre class="r"><code>stroop_model_language</code></pre>
 <pre><code>## 
 ## Call:
@@ -1091,7 +1698,7 @@ my_results</code></pre>
 ## 
 ## Coefficients:
 ## (Intercept)          age           IQ  
-##    22.15387     -0.05899      0.17098</code></pre>
+##    17.47389     -0.05973      0.21886</code></pre>
 <pre class="r"><code>summary(stroop_model_language)</code></pre>
 <pre><code>## 
 ## Call:
@@ -1099,26 +1706,20 @@ my_results</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.4736 -1.1456 -0.2982  1.4977  4.4921 
+## -5.3732 -1.1091 -0.2987  1.5170  4.5317 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value
-## (Intercept) 22.15387    4.87196   4.547
-## age         -0.05899    0.05041  -1.170
-## IQ           0.17098    0.04639   3.686
-##             Pr(&gt;|t|)    
-## (Intercept)  0.00025 ***
-## age          0.25715    
-## IQ           0.00169 ** 
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 17.47389    5.96264   2.931  0.00894 **
+## age         -0.05973    0.05010  -1.192  0.24862   
+## IQ           0.21886    0.05849   3.742  0.00149 **
 ## ---
-## Signif. codes:  
-##   0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39;
-##   0.1 &#39; &#39; 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 2.371 on 18 degrees of freedom
+## Residual standard error: 2.355 on 18 degrees of freedom
 ##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.4325, Adjusted R-squared:  0.3695 
-## F-statistic:  6.86 on 2 and 18 DF,  p-value: 0.006101</code></pre>
+## Multiple R-squared:   0.44,  Adjusted R-squared:  0.3777 
+## F-statistic:  7.07 on 2 and 18 DF,  p-value: 0.00542</code></pre>
 </div>
 
 

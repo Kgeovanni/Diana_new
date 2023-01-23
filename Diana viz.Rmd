@@ -1,8 +1,10 @@
 ---
 title: "QP Data Analysis"
 author: "Diana Sanchez"
-date: "August 2022"
-output: html_document
+date: "AJanuary 2023"
+output:
+  html_document: default
+  word_document: default
 ---
 
 
@@ -10,7 +12,7 @@ rm(list = ls(all.names = TRUE)) #clear R environment
 
 
 # Load libraries
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE , include=FALSE,echo =TRUE}
 library(readr)
 library(ggplot2)
 library(GGally)
@@ -27,41 +29,157 @@ library(scatterplot3d)
 library(tidyr)
 library(readr)
 library(readxl)
+
+library(patchwork)
 ```
 
 
 
 #Analysis of all_data 
 ## Tidy all_data
-all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward).
-```{r}
+all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward).Including the kbzo0 who was later removed.
+```{r message=FALSE, warning=FALSE , include=FALSE,echo =TRUE}
 #Load working data
 all_data <- read.csv("/Users/princesa/Desktop/diana/all_data.csv", header = TRUE)
 
 #summary
 summary(all_data)
 
+#remove outlier No.45 (kbzo7)
+new_all_data <- all_data[-c(45),]
+
 #separate groups: nonLanguage teachers and language teachers
-nonLanguage <- all_data[1:36, ]
-language <- all_data[37:58, ]
+nonLanguage <- new_all_data[1:36, ]
+language <- new_all_data[37:57, ]
 
-nonLanguage$language = "NonLanguage"
-language$language = "Language"
+nonLanguage$language = "NonLanguage" #add column "language" to indicate nonlanguage
+language$language = "Language" #add column "language" to indicate language
 
-#adding column to indicate nonLanguage or language for each participant
-all_data = bind_rows(nonLanguage,language)
+#adding "language" column to indicate nonLanguage or language for each participant in all_data
+new_all_data = bind_rows(nonLanguage,language)
 ```
 
-##Data Visualization of all participants with ggplot
+
+
+
 ```{r}
-#all_data plot
-ggplot(all_data, aes(x = age, y = IQ)) +
-  #geom_jitter(width = .2)
-  geom_point(size = 1) +
-   ggtitle("Language Plot")
-  #geom_smooth(method = "") +
-  #facet_grid(language~backward_correct)
+#getwd() #check working directory
+#lm(stroop_correct ~ language + age + IQ)
+
+#lm(stroop_correct ~ language * age * IQ)
+
+#lm(stroop_correct~language_sum*age_z*iQ_q)
 ```
+
+
+
+
+
+##Standardize Age and IQ
+```{r}
+final_df = new_all_data %>% mutate(group_language = if_else(language == 'NonLanguage',-1,1),
+            age_z = (age - mean(age)) / sd(age),
+            iq_z = (IQ - mean(IQ)) / sd(IQ))
+final_df
+```
+
+
+
+##Plots 
+```{r}
+plot1 <- final_df %>% 
+  ggplot()+
+  aes(x = age_z, y=flanker_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 1") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot2 <- final_df %>% 
+  ggplot()+
+  aes(x = age_z, y=stroop_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 2") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot3 <- final_df %>% 
+  ggplot()+
+  aes(x = age_z, y=backward_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 3") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+library(patchwork)
+plot1 + plot2 + plot3
+plot_layout(ncol = 2)
+```
+
+```{r}
+plot4 <- final_df %>% 
+  ggplot()+
+  aes(x = iq_z, y=flanker_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 4") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot5 <- final_df %>% 
+  ggplot()+
+  aes(x = iq_z, y=stroop_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 5") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot6 <- final_df %>% 
+  ggplot()+
+  aes(x = iq_z, y=backward_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Plot 6") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+library(patchwork)
+plot4 + plot5 + plot6
+plot_layout(ncol = 2)
+```
+
+
+## Background Questionnaire
+```{r}
+background_survey <- read.csv("~/Desktop/RStudio_QP/experiment_data/background_survey.csv", header = TRUE)
+```
+
+```{r }
+str(background_survey)
+background_survey$Age <- as.numeric(background_survey$Age)
+background_survey_1  <- background_survey[1:57,] 
+background_survey_1
+
+library(table1)
+table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
+
+table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = "Rtable1-grid")
+
+
+table1(~Bilingual + Residence + Teaching_Level + Experience | Gender , data = background_survey_1) 
+```
+
+
+
+
+
+
+
+
 
 # Analsyis by groups
 Data Analysis for nonLanguage Group {.tabset}
