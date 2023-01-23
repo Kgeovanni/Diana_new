@@ -25,6 +25,7 @@ library(stringi)
 library(purrr)
 library(broom)
 library(scatterplot3d)
+library(table1)
 
 library(tidyr)
 library(readr)
@@ -60,21 +61,6 @@ new_all_data = bind_rows(nonLanguage,language)
 ```
 
 
-
-
-```{r}
-#getwd() #check working directory
-#lm(stroop_correct ~ language + age + IQ)
-
-#lm(stroop_correct ~ language * age * IQ)
-
-#lm(stroop_correct~language_sum*age_z*iQ_q)
-```
-
-
-
-
-
 ##Standardize Age and IQ
 ```{r}
 final_df = new_all_data %>% mutate(group_language = if_else(language == 'NonLanguage',-1,1),
@@ -82,6 +68,37 @@ final_df = new_all_data %>% mutate(group_language = if_else(language == 'NonLang
             iq_z = (IQ - mean(IQ)) / sd(IQ))
 final_df
 ```
+
+```{r}
+m1 = lm(stroop_correct ~ language + age + IQ, final_df)
+summary(m1)
+
+m2 = lm(stroop_correct ~ language * age * IQ, final_df)
+summary(m2)
+
+m3 = lm(stroop_correct~group_language * age_z * iq_z, final_df)
+summary(m3)
+
+m4 = lm(flanker_correct ~ language + age + IQ, final_df)
+summary(m4)
+
+m5 = lm(flanker_correct ~ language * age * IQ, final_df)
+summary(m5)
+
+m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df)
+summary(m6)
+
+m7 = lm(backward_correct ~ language + age + IQ, final_df)
+summary(m7)
+
+m8 = lm(backward_correct ~ language * age * IQ, final_df)
+summary(m8)
+
+m9 = lm(backward_correct~group_language * age_z * iq_z, final_df)
+summary(m9)
+```
+
+
 
 
 
@@ -162,15 +179,25 @@ background_survey <- read.csv("~/Desktop/RStudio_QP/experiment_data/background_s
 str(background_survey)
 background_survey$Age <- as.numeric(background_survey$Age)
 background_survey_1  <- background_survey[1:57,] 
+
 background_survey_1
 
+#background_survey_1$Experience = gsub(" years","",background_survey_1$Experience)
+
+#library(stringr)
+#str_remove_all(background_survey_1$Experience, " years")
+
+#reorder(background_survey_1$Experience,as.numeric(gsub("-\\d+","",background_survey_1$Experience)))
+
+background_survey_1$Experience = factor(background_survey_1$Experience,levels = c('1-3 years', '4-6 years', '7-10 years', '11-15 years', '16+ years' ))
 library(table1)
 table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
 
 table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = "Rtable1-grid")
 
-
 table1(~Bilingual + Residence + Teaching_Level + Experience | Gender , data = background_survey_1) 
+
+
 ```
 
 
