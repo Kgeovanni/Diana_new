@@ -1,7 +1,7 @@
 ---
 title: "QP Data Analysis"
 author: "Diana Sanchez"
-date: "AJanuary 2023"
+date: "January 2023"
 output:
   html_document: default
   word_document: default
@@ -73,8 +73,21 @@ final_df
 m1 = lm(stroop_correct ~ language + age + IQ, final_df)
 summary(m1)
 
+par(mfrow = c(2,2)) 
+plot(m1) 
+
+AIC(m1)
+BIC(m1)
+
+
 m2 = lm(stroop_correct ~ language * age * IQ, final_df)
 summary(m2)
+
+par(mfrow = c(2,2)) 
+plot(m2) 
+
+AIC(m2)
+BIC(m2)
 
 m3 = lm(stroop_correct~group_language * age_z * iq_z, final_df)
 summary(m3)
@@ -132,8 +145,7 @@ plot3 <- final_df %>%
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
 
 library(patchwork)
-plot1 + plot2 + plot3
-plot_layout(ncol = 2)
+(plot1 + plot_spacer() + plot2) / (plot_spacer() + plot3 + plot_spacer())  
 ```
 
 ```{r}
@@ -182,15 +194,10 @@ background_survey_1  <- background_survey[1:57,]
 
 background_survey_1
 
-#background_survey_1$Experience = gsub(" years","",background_survey_1$Experience)
-
-#library(stringr)
-#str_remove_all(background_survey_1$Experience, " years")
-
-#reorder(background_survey_1$Experience,as.numeric(gsub("-\\d+","",background_survey_1$Experience)))
-
+#Reorganized years of experience in order on table
 background_survey_1$Experience = factor(background_survey_1$Experience,levels = c('1-3 years', '4-6 years', '7-10 years', '11-15 years', '16+ years' ))
-library(table1)
+
+
 table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
 
 table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = "Rtable1-grid")
@@ -204,8 +211,8 @@ table1(~Bilingual + Residence + Teaching_Level + Experience | Gender , data = ba
 
 
 
-
-
+#######################################
+This is old R coding. Before recommendations.
 
 
 # Analsyis by groups
