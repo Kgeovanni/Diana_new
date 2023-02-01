@@ -38,7 +38,7 @@ library(patchwork)
 
 #Analysis of all_data 
 ## Tidy all_data
-all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward).Including the kbzo0 who was later removed.
+all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward). new_all_data excludes participant kbzo0 who was removed.
 ```{r message=FALSE, warning=FALSE , include=FALSE,echo =TRUE}
 #Load working data
 all_data <- read.csv("/Users/princesa/Desktop/diana/all_data.csv", header = TRUE)
@@ -92,23 +92,65 @@ BIC(m2)
 m3 = lm(stroop_correct~group_language * age_z * iq_z, final_df)
 summary(m3)
 
+par(mfrow = c(2,2)) 
+plot(m3) 
+
+AIC(m3)
+BIC(m3)
+
 m4 = lm(flanker_correct ~ language + age + IQ, final_df)
 summary(m4)
+
+par(mfrow = c(2,2)) 
+plot(m4) 
+
+AIC(m4)
+BIC(m4)
 
 m5 = lm(flanker_correct ~ language * age * IQ, final_df)
 summary(m5)
 
+par(mfrow = c(2,2)) 
+plot(m5) 
+
+AIC(m5)
+BIC(m5)
+
 m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df)
 summary(m6)
+
+par(mfrow = c(2,2)) 
+plot(m6) 
+
+AIC(m6)
+BIC(m6)
 
 m7 = lm(backward_correct ~ language + age + IQ, final_df)
 summary(m7)
 
+par(mfrow = c(2,2)) 
+plot(m7) 
+
+AIC(m7)
+BIC(m7)
+
 m8 = lm(backward_correct ~ language * age * IQ, final_df)
 summary(m8)
 
+par(mfrow = c(2,2)) 
+plot(m8) 
+
+AIC(m8)
+BIC(m8)
+
 m9 = lm(backward_correct~group_language * age_z * iq_z, final_df)
 summary(m9)
+
+par(mfrow = c(2,2)) 
+plot(m9) 
+
+AIC(m9)
+BIC(m9)
 ```
 
 
@@ -145,7 +187,8 @@ plot3 <- final_df %>%
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
 
 library(patchwork)
-(plot1 + plot_spacer() + plot2) / (plot_spacer() + plot3 + plot_spacer())  
+#(plot1 + plot_spacer() + plot2) / (plot_spacer() + plot3 + plot_spacer())  
+plot1 / plot2  / plot3 
 ```
 
 ```{r}
