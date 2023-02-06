@@ -488,6 +488,13 @@ summary(m3)</code></pre>
 ## Residual standard error: 4.825 on 49 degrees of freedom
 ## Multiple R-squared:  0.2707, Adjusted R-squared:  0.1665 
 ## F-statistic: 2.598 on 7 and 49 DF,  p-value: 0.02313</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m3) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<pre class="r"><code>AIC(m3)</code></pre>
+<pre><code>## [1] 350.5537</code></pre>
+<pre class="r"><code>BIC(m3)</code></pre>
+<pre><code>## [1] 368.9412</code></pre>
 <pre class="r"><code>m4 = lm(flanker_correct ~ language + age + IQ, final_df)
 summary(m4)</code></pre>
 <pre><code>## 
@@ -510,6 +517,13 @@ summary(m4)</code></pre>
 ## Residual standard error: 6.123 on 53 degrees of freedom
 ## Multiple R-squared:  0.1212, Adjusted R-squared:  0.07149 
 ## F-statistic: 2.437 on 3 and 53 DF,  p-value: 0.07474</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m4) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
+<pre class="r"><code>AIC(m4)</code></pre>
+<pre><code>## [1] 374.1816</code></pre>
+<pre class="r"><code>BIC(m4)</code></pre>
+<pre><code>## [1] 384.3969</code></pre>
 <pre class="r"><code>m5 = lm(flanker_correct ~ language * age * IQ, final_df)
 summary(m5)</code></pre>
 <pre><code>## 
@@ -536,6 +550,13 @@ summary(m5)</code></pre>
 ## Residual standard error: 5.72 on 49 degrees of freedom
 ## Multiple R-squared:  0.291,  Adjusted R-squared:  0.1897 
 ## F-statistic: 2.873 on 7 and 49 DF,  p-value: 0.01353</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m5) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-5.png" width="672" /></p>
+<pre class="r"><code>AIC(m5)</code></pre>
+<pre><code>## [1] 369.9446</code></pre>
+<pre class="r"><code>BIC(m5)</code></pre>
+<pre><code>## [1] 388.332</code></pre>
 <pre class="r"><code>m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df)
 summary(m6)</code></pre>
 <pre><code>## 
@@ -563,6 +584,13 @@ summary(m6)</code></pre>
 ## Residual standard error: 5.72 on 49 degrees of freedom
 ## Multiple R-squared:  0.291,  Adjusted R-squared:  0.1897 
 ## F-statistic: 2.873 on 7 and 49 DF,  p-value: 0.01353</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m6) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-6.png" width="672" /></p>
+<pre class="r"><code>AIC(m6)</code></pre>
+<pre><code>## [1] 369.9446</code></pre>
+<pre class="r"><code>BIC(m6)</code></pre>
+<pre><code>## [1] 388.332</code></pre>
 <pre class="r"><code>m7 = lm(backward_correct ~ language + age + IQ, final_df)
 summary(m7)</code></pre>
 <pre><code>## 
@@ -585,6 +613,13 @@ summary(m7)</code></pre>
 ## Residual standard error: 1.839 on 53 degrees of freedom
 ## Multiple R-squared:  0.1809, Adjusted R-squared:  0.1345 
 ## F-statistic:   3.9 on 3 and 53 DF,  p-value: 0.01365</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m7) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-7.png" width="672" /></p>
+<pre class="r"><code>AIC(m7)</code></pre>
+<pre><code>## [1] 237.0792</code></pre>
+<pre class="r"><code>BIC(m7)</code></pre>
+<pre><code>## [1] 247.2945</code></pre>
 <pre class="r"><code>m8 = lm(backward_correct ~ language * age * IQ, final_df)
 summary(m8)</code></pre>
 <pre><code>## 
@@ -609,6 +644,13 @@ summary(m8)</code></pre>
 ## Residual standard error: 1.793 on 49 degrees of freedom
 ## Multiple R-squared:  0.2801, Adjusted R-squared:  0.1773 
 ## F-statistic: 2.724 on 7 and 49 DF,  p-value: 0.01811</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m8) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-8.png" width="672" /></p>
+<pre class="r"><code>AIC(m8)</code></pre>
+<pre><code>## [1] 237.716</code></pre>
+<pre class="r"><code>BIC(m8)</code></pre>
+<pre><code>## [1] 256.1034</code></pre>
 <pre class="r"><code>m9 = lm(backward_correct~group_language * age_z * iq_z, final_df)
 summary(m9)</code></pre>
 <pre><code>## 
@@ -636,6 +678,13 @@ summary(m9)</code></pre>
 ## Residual standard error: 1.793 on 49 degrees of freedom
 ## Multiple R-squared:  0.2801, Adjusted R-squared:  0.1773 
 ## F-statistic: 2.724 on 7 and 49 DF,  p-value: 0.01811</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2)) 
+plot(m9) </code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-9.png" width="672" /></p>
+<pre class="r"><code>AIC(m9)</code></pre>
+<pre><code>## [1] 237.716</code></pre>
+<pre class="r"><code>BIC(m9)</code></pre>
+<pre><code>## [1] 256.1034</code></pre>
 <p>##Plots</p>
 <pre class="r"><code>plot1 &lt;- final_df %&gt;% 
   ggplot()+
@@ -1326,606 +1375,7 @@ table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_su
 </tbody>
 </table>
 </div>
-<div id="section" class="section level39">
-<p class="heading"></p>
-<p>This is old R coding. Before recommendations.</p>
 </div>
-</div>
-</div>
-<div id="analsyis-by-groups" class="section level1">
-<h1>Analsyis by groups</h1>
-<p>Data Analysis for nonLanguage Group {.tabset} The nonLanguage group consist of the teachers who only use one language in their professional work setting.</p>
-<div id="linear-regression-model-for-nonlanguage-backward-task" class="section level2">
-<h2>Linear regression model for nonLanguage BACKWARD task</h2>
-<pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
-<pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
-## 1       adnm2  36 128                5              45             39
-## 2       bjfc1  40 106                4              44             38
-## 3       buzt0  30 139                5              49             39
-## 4       bwat2  34 122                1              46             39
-## 5       cbky9  49 128                4              48             40
-## 6       cfug6  34  71                0              27              2
-##      language
-## 1 NonLanguage
-## 2 NonLanguage
-## 3 NonLanguage
-## 4 NonLanguage
-## 5 NonLanguage
-## 6 NonLanguage</code></pre>
-<pre class="r"><code>##plot
-plot(backward_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
-<pre class="r"><code>#linear model
-backward_model_nonLanguage &lt;- lm(backward_correct ~ age + IQ, data = nonLanguage)
-#abline(backward_model_nonLanguage)
-
-my_results &lt;- tidy(backward_model_nonLanguage)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept) -1.04       2.67      -0.390  0.699 
-## 2 age         -0.00564    0.0366    -0.154  0.878 
-## 3 IQ           0.0399     0.0193     2.06   0.0469</code></pre>
-<pre class="r"><code>backward_model_nonLanguage</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = backward_correct ~ age + IQ, data = nonLanguage)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##   -1.042424    -0.005639     0.039908</code></pre>
-<pre class="r"><code>summary(backward_model_nonLanguage)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = backward_correct ~ age + IQ, data = nonLanguage)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.3665 -2.0947  0.6342  1.3793  2.6147 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept) -1.042424   2.674695  -0.390   0.6992  
-## age         -0.005639   0.036568  -0.154   0.8784  
-## IQ           0.039908   0.019329   2.065   0.0469 *
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1.933 on 33 degrees of freedom
-## Multiple R-squared:  0.1187, Adjusted R-squared:  0.0653 
-## F-statistic: 2.222 on 2 and 33 DF,  p-value: 0.1243</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(backward_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
-<pre class="r"><code>AIC(backward_model_nonLanguage)</code></pre>
-<pre><code>## [1] 154.4783</code></pre>
-<pre class="r"><code>BIC(backward_model_nonLanguage)</code></pre>
-<pre><code>## [1] 160.8124</code></pre>
-</div>
-<div id="linear-regression-model-for-nonlanguage-flanker-task" class="section level2">
-<h2>Linear regression model for nonLanguage FLANKER task</h2>
-<pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
-<pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
-## 1       adnm2  36 128                5              45             39
-## 2       bjfc1  40 106                4              44             38
-## 3       buzt0  30 139                5              49             39
-## 4       bwat2  34 122                1              46             39
-## 5       cbky9  49 128                4              48             40
-## 6       cfug6  34  71                0              27              2
-##      language
-## 1 NonLanguage
-## 2 NonLanguage
-## 3 NonLanguage
-## 4 NonLanguage
-## 5 NonLanguage
-## 6 NonLanguage</code></pre>
-<pre class="r"><code>##plot
-plot(flanker_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="Diana-viz_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
-<pre class="r"><code>#linear model
-flanker_model_nonLanguage &lt;- lm(flanker_correct ~ age + IQ, data = nonLanguage)
-#abline(flanker_model_nonLanguage)
-
-my_results &lt;- tidy(flanker_model_nonLanguage)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)  25.3       7.88       3.21  0.00294
-## 2 age           0.0786    0.108      0.730 0.471  
-## 3 IQ            0.132     0.0569     2.32  0.0269</code></pre>
-<pre class="r"><code>flanker_model_nonLanguage</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = nonLanguage)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##    25.29453      0.07861      0.13184</code></pre>
-<pre class="r"><code>summary(flanker_model_nonLanguage)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = nonLanguage)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -14.9716  -0.3857   1.5301   3.0792   8.2506 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept) 25.29453    7.87660   3.211  0.00294 **
-## age          0.07861    0.10769   0.730  0.47054   
-## IQ           0.13184    0.05692   2.316  0.02691 * 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 5.692 on 33 degrees of freedom
-## Multiple R-squared:  0.144,  Adjusted R-squared:  0.09211 
-## F-statistic: 2.775 on 2 and 33 DF,  p-value: 0.0769</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(flanker_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
-<pre class="r"><code>AIC(flanker_model_nonLanguage)</code></pre>
-<pre><code>## [1] 232.2427</code></pre>
-<pre class="r"><code>BIC(flanker_model_nonLanguage)</code></pre>
-<pre><code>## [1] 238.5768</code></pre>
-</div>
-<div id="linear-regression-model-for-nonlanguage-stroop-task" class="section level2">
-<h2>Linear regression model for nonLanguage STROOP task</h2>
-<pre class="r"><code>data(nonLanguage)</code></pre>
-<pre><code>## Warning in data(nonLanguage): data set &#39;nonLanguage&#39; not found</code></pre>
-<pre class="r"><code>head(nonLanguage)</code></pre>
-<pre><code>##   participant age  IQ backward_correct flanker_correct stroop_correct
-## 1       adnm2  36 128                5              45             39
-## 2       bjfc1  40 106                4              44             38
-## 3       buzt0  30 139                5              49             39
-## 4       bwat2  34 122                1              46             39
-## 5       cbky9  49 128                4              48             40
-## 6       cfug6  34  71                0              27              2
-##      language
-## 1 NonLanguage
-## 2 NonLanguage
-## 3 NonLanguage
-## 4 NonLanguage
-## 5 NonLanguage
-## 6 NonLanguage</code></pre>
-<pre class="r"><code>##plot
-plot(stroop_correct ~ age + IQ, data = nonLanguage, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<pre class="r"><code>#linear model
-stroop_model_nonLanguage &lt;- lm(stroop_correct ~ age + IQ, data = nonLanguage)
-abline(stroop_model_nonLanguage)</code></pre>
-<pre><code>## Warning in abline(stroop_model_nonLanguage): only using the first two of 3
-## regression coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
-<pre class="r"><code>my_results &lt;- tidy(stroop_model_nonLanguage)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)  16.1       7.95       2.03  0.0509 
-## 2 age           0.0731    0.109      0.672 0.506  
-## 3 IQ            0.171     0.0575     2.97  0.00551</code></pre>
-<pre class="r"><code>stroop_model_nonLanguage</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = nonLanguage)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##    16.10915      0.07307      0.17072</code></pre>
-<pre class="r"><code>summary(stroop_model_nonLanguage)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = nonLanguage)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -28.7149  -1.5481   0.5901   2.1260   7.2127 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept) 16.10915    7.95253   2.026  0.05095 . 
-## age          0.07307    0.10873   0.672  0.50621   
-## IQ           0.17072    0.05747   2.971  0.00551 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 5.747 on 33 degrees of freedom
-## Multiple R-squared:  0.2125, Adjusted R-squared:  0.1648 
-## F-statistic: 4.453 on 2 and 33 DF,  p-value: 0.0194</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(stroop_model_nonLanguage) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
-<pre class="r"><code>AIC(stroop_model_nonLanguage)</code></pre>
-<pre><code>## [1] 232.9334</code></pre>
-<pre class="r"><code>BIC(stroop_model_nonLanguage)</code></pre>
-<pre><code>## [1] 239.2675</code></pre>
-</div>
-</div>
-<div id="data-analysis-for-language-group" class="section level1 tabset">
-<h1 class="tabset">Data Analysis for Language Group</h1>
-<p>The language group consist of the teachers who use more than one language in their professional work setting.</p>
-<div id="linear-regression-model-for-language-backward" class="section level2">
-<h2>Linear regression model for language BACKWARD</h2>
-<pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
-<pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
-## 37    bi_ajli0  35  95                4              45             38 Language
-## 38    bi_dckv1  30 104                4              49             38 Language
-## 39    bi_dvyf7  58 104                5              37             39 Language
-## 40    bi_evur7  42  94                0              40             34 Language
-## 41    bi_giah0  23 101                5              44             39 Language
-## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
-<pre class="r"><code>#plot Language
-plot(backward_correct ~ age + IQ, data = language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<pre class="r"><code>#linear model
-backward_model_language &lt;- lm(backward_correct ~ age + IQ, data = language)
-abline(backward_model_language)</code></pre>
-<pre><code>## Warning in abline(backward_model_language): only using the first two of 3
-## regression coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
-<pre class="r"><code>my_results &lt;- tidy(backward_model_language)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept) -10.8       3.52       -3.07 0.00666 
-## 2 age          -0.0545    0.0296     -1.84 0.0824  
-## 3 IQ            0.159     0.0346      4.59 0.000226</code></pre>
-<pre class="r"><code>backward_model_language</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = backward_correct ~ age + IQ, data = language)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##   -10.80609     -0.05447      0.15877</code></pre>
-<pre class="r"><code>summary(backward_model_language)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = backward_correct ~ age + IQ, data = language)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2.41863 -0.85879 -0.07204  1.02296  2.45323 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -10.80609    3.52468  -3.066 0.006658 ** 
-## age          -0.05447    0.02961  -1.839 0.082403 .  
-## IQ            0.15877    0.03457   4.592 0.000226 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1.392 on 18 degrees of freedom
-## Multiple R-squared:  0.5477, Adjusted R-squared:  0.4975 
-## F-statistic:  10.9 on 2 and 18 DF,  p-value: 0.0007918</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(backward_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
-<pre class="r"><code>AIC(backward_model_language)</code></pre>
-<pre><code>## [1] 78.25649</code></pre>
-<pre class="r"><code>BIC(backward_model_language)</code></pre>
-<pre><code>## [1] 82.43458</code></pre>
-</div>
-<div id="linear-regression-model-for-language-flanker" class="section level2">
-<h2>Linear regression model for language FLANKER</h2>
-<pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
-<pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
-## 37    bi_ajli0  35  95                4              45             38 Language
-## 38    bi_dckv1  30 104                4              49             38 Language
-## 39    bi_dvyf7  58 104                5              37             39 Language
-## 40    bi_evur7  42  94                0              40             34 Language
-## 41    bi_giah0  23 101                5              44             39 Language
-## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
-<pre class="r"><code>#plot Language
-plot(flanker_correct ~ age + IQ, data = language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<pre class="r"><code>#linear model
-flanker_model_language &lt;- lm(flanker_correct ~ age + IQ, data = language)
-abline(flanker_model_language)</code></pre>
-<pre><code>## Warning in abline(flanker_model_language): only using the first two of 3
-## regression coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
-<pre class="r"><code>my_results &lt;- tidy(flanker_model_language)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)   13.9      16.9       0.821  0.422 
-## 2 age           -0.156     0.142    -1.10   0.285 
-## 3 IQ             0.341     0.166     2.06   0.0546</code></pre>
-<pre class="r"><code>flanker_model_language</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = language)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##     13.8765      -0.1564       0.3410</code></pre>
-<pre class="r"><code>summary(flanker_model_language)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = language)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -16.7238  -0.7166   2.2128   3.7331   6.0813 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  13.8765    16.9043   0.821   0.4224  
-## age          -0.1564     0.1420  -1.101   0.2853  
-## IQ            0.3410     0.1658   2.056   0.0546 .
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 6.677 on 18 degrees of freedom
-## Multiple R-squared:  0.2059, Adjusted R-squared:  0.1176 
-## F-statistic: 2.333 on 2 and 18 DF,  p-value: 0.1256</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(flanker_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
-<pre class="r"><code>AIC(flanker_model_language)</code></pre>
-<pre><code>## [1] 144.1031</code></pre>
-<pre class="r"><code>BIC(flanker_model_language)</code></pre>
-<pre><code>## [1] 148.2812</code></pre>
-</div>
-<div id="linear-regression-model-for-language-stroop" class="section level2">
-<h2>Linear regression model for language STROOP</h2>
-<pre class="r"><code>data(language)</code></pre>
-<pre><code>## Warning in data(language): data set &#39;language&#39; not found</code></pre>
-<pre class="r"><code>head(language)</code></pre>
-<pre><code>##    participant age  IQ backward_correct flanker_correct stroop_correct language
-## 37    bi_ajli0  35  95                4              45             38 Language
-## 38    bi_dckv1  30 104                4              49             38 Language
-## 39    bi_dvyf7  58 104                5              37             39 Language
-## 40    bi_evur7  42  94                0              40             34 Language
-## 41    bi_giah0  23 101                5              44             39 Language
-## 42    bi_igsy3  50 115                6              49             39 Language</code></pre>
-<pre class="r"><code>#plot Language
-par(mfrow = c(2,2))
-plot(stroop_correct ~ age + IQ, data = language, pch=16)
-
-#linear model
-stroop_model_language &lt;- lm(stroop_correct ~ age + IQ, data = language)
-
-par(mfrow = c(2,2))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<pre class="r"><code>plot(stroop_model_language)
-
-my_results &lt;- tidy(stroop_model_language)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)  17.5       5.96        2.93 0.00894
-## 2 age          -0.0597    0.0501     -1.19 0.249  
-## 3 IQ            0.219     0.0585      3.74 0.00149</code></pre>
-<pre class="r"><code>stroop_model_language</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = language)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##    17.47389     -0.05973      0.21886</code></pre>
-<pre class="r"><code>summary(stroop_model_language)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = language)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.3732 -1.1091 -0.2987  1.5170  4.5317 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept) 17.47389    5.96264   2.931  0.00894 **
-## age         -0.05973    0.05010  -1.192  0.24862   
-## IQ           0.21886    0.05849   3.742  0.00149 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 2.355 on 18 degrees of freedom
-## Multiple R-squared:   0.44,  Adjusted R-squared:  0.3777 
-## F-statistic:  7.07 on 2 and 18 DF,  p-value: 0.00542</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(stroop_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
-<pre class="r"><code>AIC(stroop_model_language)</code></pre>
-<pre><code>## [1] 100.3369</code></pre>
-<pre class="r"><code>BIC(stroop_model_language)</code></pre>
-<pre><code>## [1] 104.5149</code></pre>
-<p>#ADDITIONAL ANALYSIS</p>
-</div>
-<div id="histogram-to-observe-results" class="section level2">
-<h2>Histogram to observe results</h2>
-<pre class="r"><code>attach(all_data) #using objects in df all_data
-hist(backward_correct) #this could be considered &quot;normal&quot;</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre class="r"><code>hist(flanker_correct) #not normal</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
-<pre class="r"><code>hist(stroop_correct) #not normal</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-15-3.png" width="672" /></p>
-<pre class="r"><code>summary(all_data)</code></pre>
-<pre><code>##  participant             age              IQ        backward_correct
-##  Length:58          Min.   :22.00   Min.   : 68.0   Min.   :0.000   
-##  Class :character   1st Qu.:32.00   1st Qu.: 97.0   1st Qu.:1.000   
-##  Mode  :character   Median :38.00   Median :105.0   Median :4.000   
-##                     Mean   :39.19   Mean   :106.2   Mean   :3.138   
-##                     3rd Qu.:47.00   3rd Qu.:117.2   3rd Qu.:5.000   
-##                     Max.   :59.00   Max.   :139.0   Max.   :6.000   
-##  flanker_correct stroop_correct 
-##  Min.   : 0.00   Min.   : 0.00  
-##  1st Qu.:40.50   1st Qu.:38.00  
-##  Median :45.00   Median :39.00  
-##  Mean   :41.91   Mean   :36.83  
-##  3rd Qu.:47.00   3rd Qu.:40.00  
-##  Max.   :49.00   Max.   :40.00</code></pre>
-</div>
-</div>
-<div id="normalize-data" class="section level1">
-<h1>normalize data</h1>
-<p>Attempted to normalize data to see if it would make a difference.</p>
-<pre class="r"><code>attach(all_data)</code></pre>
-<pre><code>## The following objects are masked from all_data (pos = 3):
-## 
-##     age, backward_correct, flanker_correct, IQ, participant,
-##     stroop_correct</code></pre>
-<pre class="r"><code>scaledflank &lt;- scale(flanker_correct)
-scaledstroop &lt;- scale(stroop_correct)
-scaledback &lt;- scale(backward_correct)
-
-lang = substring(participant,1,3)==&quot;bi_&quot;
-biling = rep(&quot;false&quot;,length(lang)) #make this variable all FALSE
-
-biling[lang]=&quot;true&quot; #
-data &lt;- data.frame(age,IQ,scaledflank,scaledstroop,scaledback,biling)
-#colnames(data)=c(&quot;age&quot;,&quot;IQ&quot;,&quot;scaledflank&quot;,&quot;scaledstroop&quot;,&quot;scaledback&quot;,&quot;biling&quot;) #not needed but may use later
-
-hist(scaledback)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<pre class="r"><code>hist(scaledstroop)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
-<pre class="r"><code>hist(scaledflank)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
-<p>#——————————————## TESTING Additional plots</p>
-<pre class="r"><code>ggplot(data = all_data) +
-  geom_point(mapping = aes(x = backward_correct, y = IQ, color = age))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<pre class="r"><code>scatterplot3d(
-  all_data[1:4], pch = 19, color = &quot;steelblue&quot;,
-  grid = TRUE, box = FALSE,
-  mar = c(3, 3, 0.5, 3)
-)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
-<pre class="r"><code># nonLanguage Scatterplot
-ggplot(nonLanguage, aes(backward_correct, IQ)) +
-  geom_point(fill = &quot;dark green&quot;, color = &quot;black&quot;,
-             size = 5, shape = 21) +
-  ggtitle(&quot;LanguagePlot&quot;)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-17-3.png" width="672" /></p>
-<p>#————————————————————————#</p>
-</div>
-<div id="removing-1-data-45-which-may-be-an-outlier.-this-was-done-just-to-observe-if-it-would-result-in-a-difference-in-results." class="section level1">
-<h1>Removing 1 data (45) which may be an outlier. This was done just to observe if it would result in a difference in results.</h1>
-<p>##Removing line 45</p>
-<pre class="r"><code>#created new data with deleted row 45
-new_all_data &lt;- all_data[-c(45),]
-
-#created new language group (-45)
-new_language &lt;- new_all_data[37:58, ]
-
-
-#plot Language
-plot(flanker_correct ~ age + IQ, data = new_language, pch=16)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<pre class="r"><code>#linear model
-flanker_model_language &lt;- lm(flanker_correct ~ age + IQ, data = new_language)
-abline(flanker_model_language)</code></pre>
-<pre><code>## Warning in abline(flanker_model_language): only using the first two of 3
-## regression coefficients</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
-<pre class="r"><code>my_results &lt;- tidy(flanker_model_language)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)   13.9      16.9       0.821  0.422 
-## 2 age           -0.156     0.142    -1.10   0.285 
-## 3 IQ             0.341     0.166     2.06   0.0546</code></pre>
-<pre class="r"><code>flanker_model_language</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = new_language)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##     13.8765      -0.1564       0.3410</code></pre>
-<pre class="r"><code>summary(flanker_model_language)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = flanker_correct ~ age + IQ, data = new_language)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -16.7238  -0.7166   2.2128   3.7331   6.0813 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  13.8765    16.9043   0.821   0.4224  
-## age          -0.1564     0.1420  -1.101   0.2853  
-## IQ            0.3410     0.1658   2.056   0.0546 .
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 6.677 on 18 degrees of freedom
-##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.2059, Adjusted R-squared:  0.1176 
-## F-statistic: 2.333 on 2 and 18 DF,  p-value: 0.1256</code></pre>
-<pre class="r"><code>par(mfrow = c(2,2)) 
-plot(flanker_model_language) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-3.png" width="672" /></p>
-<pre class="r"><code>##
-#plot Language
-par(mfrow = c(2,2))
-plot(stroop_correct ~ age + IQ, data = new_language, pch=16)
-
-#linear model
-stroop_model_language &lt;- lm(stroop_correct ~ age + IQ, data = new_language)
-
-par(mfrow = c(2,2))</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-4.png" width="672" /></p>
-<pre class="r"><code>plot(stroop_model_language)</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-5.png" width="672" /></p>
-<pre class="r"><code>my_results &lt;- tidy(stroop_model_language)
-my_results</code></pre>
-<pre><code>## # A tibble: 3 × 5
-##   term        estimate std.error statistic p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)  17.5       5.96        2.93 0.00894
-## 2 age          -0.0597    0.0501     -1.19 0.249  
-## 3 IQ            0.219     0.0585      3.74 0.00149</code></pre>
-<pre class="r"><code>stroop_model_language</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = new_language)
-## 
-## Coefficients:
-## (Intercept)          age           IQ  
-##    17.47389     -0.05973      0.21886</code></pre>
-<pre class="r"><code>summary(stroop_model_language)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = stroop_correct ~ age + IQ, data = new_language)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.3732 -1.1091 -0.2987  1.5170  4.5317 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept) 17.47389    5.96264   2.931  0.00894 **
-## age         -0.05973    0.05010  -1.192  0.24862   
-## IQ           0.21886    0.05849   3.742  0.00149 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 2.355 on 18 degrees of freedom
-##   (1 observation deleted due to missingness)
-## Multiple R-squared:   0.44,  Adjusted R-squared:  0.3777 
-## F-statistic:  7.07 on 2 and 18 DF,  p-value: 0.00542</code></pre>
 </div>
 
 
