@@ -279,7 +279,7 @@ $(document).ready(function () {
 <p>rm(list = ls(all.names = TRUE)) #clear R environment</p>
 <div id="load-libraries" class="section level1">
 <h1>Load libraries</h1>
-<p>#Analysis of all_data ## Tidy all_data all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward). new_all_data excludes participant kbzo0 who was removed.</p>
+<p>#Analysis of all_data ## Tidy all_data all_data df includes all 58 participants, two groups. Only total correct responses were included for each experimental task (flanker, stroop, backward). new_all_data excludes participant kbzo07 who was removed.</p>
 <p>##Standardize Age and IQ</p>
 <pre class="r"><code>final_df = new_all_data %&gt;% mutate(group_language = if_else(language == &#39;NonLanguage&#39;,-1,1),
             age_z = (age - mean(age)) / sd(age),

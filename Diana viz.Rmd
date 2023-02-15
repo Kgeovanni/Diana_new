@@ -38,7 +38,7 @@ library(patchwork)
 
 #Analysis of all_data 
 ## Tidy all_data
-all_data df includes all 58 participants, two groups. Only total correct responses are included for each experimental task (flanker, stroop, backward). new_all_data excludes participant kbzo0 who was removed.
+all_data df includes all 58 participants, two groups. Only total correct responses were included for each experimental task (flanker, stroop, backward). new_all_data excludes participant kbzo07 who was removed.
 ```{r message=FALSE, warning=FALSE , include=FALSE,echo =TRUE}
 #Load working data
 all_data <- read.csv("/Users/princesa/Desktop/diana/all_data.csv", header = TRUE)
