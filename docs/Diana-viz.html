@@ -271,7 +271,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">QP Data Analysis</h1>
 <h4 class="author">Diana Sanchez</h4>
-<h4 class="date">January 2023</h4>
+<h4 class="date">March 2023</h4>
 
 </div>
 
@@ -793,7 +793,7 @@ plot4 + plot5 + plot6</code></pre>
 ##  $ Residence                                                   : chr  &quot;USA&quot; &quot;USA&quot; &quot;USA&quot; &quot;USA&quot; ...
 ##  $ Age                                                         : chr  &quot;22&quot; &quot;30&quot; &quot;32&quot; &quot;32&quot; ...
 ##  $ Ethnicity                                                   : chr  &quot;White or Caucasian&quot; &quot;White or Caucasian&quot; &quot;Asian or Pacific Islander&quot; &quot;White or Caucasian&quot; ...
-##  $ Teaching_Level                                              : chr  &quot;9-12 grade&quot; &quot;6-8 grades&quot; &quot;9-12 grade&quot; &quot;9-12 grade&quot; ...
+##  $ Teaching_Level                                              : chr  &quot;9-12 grades&quot; &quot;6-8 grades&quot; &quot;9-12 grades&quot; &quot;9-12 grades&quot; ...
 ##  $ Experience                                                  : chr  &quot;1-3 years&quot; &quot;7-10 years&quot; &quot;4-6 years&quot; &quot;7-10 years&quot; ...
 ##  $ Languages                                                   : chr  NA NA NA NA ...</code></pre>
 <pre class="r"><code>background_survey$Age &lt;- as.numeric(background_survey$Age)</code></pre>
@@ -917,69 +917,73 @@ background_survey_1</code></pre>
 ## 55         1      F United Kingdom  56        White or Caucasian
 ## 56         1      M         Mexico  33        Hispanic or Latino
 ## 57         1      M United Kingdom  49        White or Caucasian
-##        Teaching_Level  Experience                   Languages
-## 1          9-12 grade   1-3 years                        &lt;NA&gt;
-## 2          6-8 grades  7-10 years                        &lt;NA&gt;
-## 3          9-12 grade   4-6 years                        &lt;NA&gt;
-## 4          9-12 grade  7-10 years                        &lt;NA&gt;
-## 5          2nd  grade   4-6 years                        &lt;NA&gt;
-## 6          9-12 grade   16+ years                        &lt;NA&gt;
-## 7  College/University  7-10 years                        &lt;NA&gt;
-## 8        Kindergarten   4-6 years                        &lt;NA&gt;
-## 9        Kindergarten   1-3 years                        &lt;NA&gt;
-## 10 College/University   4-6 years                        &lt;NA&gt;
-## 11       Kindergarten  7-10 years                        &lt;NA&gt;
-## 12       Kindergarten   1-3 years                        &lt;NA&gt;
-## 13 College/University   4-6 years                        &lt;NA&gt;
-## 14          5th grade   16+ years                        &lt;NA&gt;
-## 15         9-12 grade 11-15 years                        &lt;NA&gt;
-## 16         grade 0-12   4-6 years                        &lt;NA&gt;
-## 17 College/University   16+ years                        &lt;NA&gt;
-## 18 College/University  7-10 years                        &lt;NA&gt;
-## 19 College/University   4-6 years                        &lt;NA&gt;
-## 20 College/University 11-15 years                        &lt;NA&gt;
-## 21         6-8 grades 11-15 years                        &lt;NA&gt;
-## 22 College/University   1-3 years                        &lt;NA&gt;
-## 23          3rd grade  7-10 years                        &lt;NA&gt;
-## 24 College/University 11-15 years                        &lt;NA&gt;
-## 25         9-12 grade   16+ years                        &lt;NA&gt;
-## 26 College/University   1-3 years                        &lt;NA&gt;
-## 27         9-12 grade   16+ years                        &lt;NA&gt;
-## 28       Kindergarten   16+ years                        &lt;NA&gt;
-## 29 College/University   1-3 years                        &lt;NA&gt;
-## 30 College/University   16+ years                        &lt;NA&gt;
-## 31 College/University   16+ years                        &lt;NA&gt;
-## 32          1st grade  7-10 years                        &lt;NA&gt;
-## 33         9-12 grade   16+ years                        &lt;NA&gt;
-## 34         6-8 grades 11-15 years                        &lt;NA&gt;
-## 35          4th grade   4-6 years                        &lt;NA&gt;
-## 36         9-12 grade   16+ years                        &lt;NA&gt;
-## 37         9-12 grade   16+ years                    Mandarin
-## 38         6-8 grades  7-10 years                     Spanish
-## 39         6-8 grades   4-6 years                     Spanish
-## 40         9-12 grade  7-10 years                     Spanish
-## 41         6-8 grades   1-3 years Spanish, Basque and English
-## 42          4th grade   16+ years                     Spanish
-## 43 College/University   4-6 years                     Spanish
-## 44          3rd grade   16+ years                      French
-## 45         6-8 grades  7-10 years                     English
-## 46         6-8 grades   16+ years                     English
-## 47 College/University   4-6 years                     English
-## 48       Kindergarten  7-10 years                     Spanish
-## 49         9-12 grade   1-3 years                     Spanish
-## 50         9-12 grade   4-6 years                     Spanish
-## 51         9-12 grade   16+ years                     Spanish
-## 52         2nd  grade  7-10 years                      French
-## 53         9-12 grade 11-15 years                     Spanish
-## 54         9-12 grade   16+ years                      French
-## 55         9-12 grade   16+ years                      French
-## 56          4th grade   1-3 years                     English
-## 57          5th grade 11-15 years                      German</code></pre>
+##               Teaching_Level  Experience                   Languages
+## 1                9-12 grades   1-3 years                        &lt;NA&gt;
+## 2                 6-8 grades  7-10 years                        &lt;NA&gt;
+## 3                9-12 grades   4-6 years                        &lt;NA&gt;
+## 4                9-12 grades  7-10 years                        &lt;NA&gt;
+## 5                  2nd grade   4-6 years                        &lt;NA&gt;
+## 6                9-12 grades   16+ years                        &lt;NA&gt;
+## 7         College/University  7-10 years                        &lt;NA&gt;
+## 8               Kindergarten   4-6 years                        &lt;NA&gt;
+## 9               Kindergarten   1-3 years                        &lt;NA&gt;
+## 10        College/University   4-6 years                        &lt;NA&gt;
+## 11              Kindergarten  7-10 years                        &lt;NA&gt;
+## 12              Kindergarten   1-3 years                        &lt;NA&gt;
+## 13        College/University   4-6 years                        &lt;NA&gt;
+## 14                 5th grade   16+ years                        &lt;NA&gt;
+## 15               9-12 grades 11-15 years                        &lt;NA&gt;
+## 16 *Kindergarten-12th grades   4-6 years                        &lt;NA&gt;
+## 17        College/University   16+ years                        &lt;NA&gt;
+## 18        College/University  7-10 years                        &lt;NA&gt;
+## 19        College/University   4-6 years                        &lt;NA&gt;
+## 20        College/University 11-15 years                        &lt;NA&gt;
+## 21                6-8 grades 11-15 years                        &lt;NA&gt;
+## 22        College/University   1-3 years                        &lt;NA&gt;
+## 23                 3rd grade  7-10 years                        &lt;NA&gt;
+## 24        College/University 11-15 years                        &lt;NA&gt;
+## 25               9-12 grades   16+ years                        &lt;NA&gt;
+## 26        College/University   1-3 years                        &lt;NA&gt;
+## 27               9-12 grades   16+ years                        &lt;NA&gt;
+## 28              Kindergarten   16+ years                        &lt;NA&gt;
+## 29        College/University   1-3 years                        &lt;NA&gt;
+## 30        College/University   16+ years                        &lt;NA&gt;
+## 31        College/University   16+ years                        &lt;NA&gt;
+## 32                 1st grade  7-10 years                        &lt;NA&gt;
+## 33               9-12 grades   16+ years                        &lt;NA&gt;
+## 34                6-8 grades 11-15 years                        &lt;NA&gt;
+## 35                 4th grade   4-6 years                        &lt;NA&gt;
+## 36               9-12 grades   16+ years                        &lt;NA&gt;
+## 37               9-12 grades   16+ years                    Mandarin
+## 38                6-8 grades  7-10 years                     Spanish
+## 39                6-8 grades   4-6 years                     Spanish
+## 40               9-12 grades  7-10 years                     Spanish
+## 41                6-8 grades   1-3 years Spanish, Basque and English
+## 42                 4th grade   16+ years                     Spanish
+## 43        College/University   4-6 years                     Spanish
+## 44                 3rd grade   16+ years                      French
+## 45                6-8 grades  7-10 years                     English
+## 46                6-8 grades   16+ years                     English
+## 47        College/University   4-6 years                     English
+## 48              Kindergarten  7-10 years                     Spanish
+## 49               9-12 grades   1-3 years                     Spanish
+## 50               9-12 grades   4-6 years                     Spanish
+## 51               9-12 grades   16+ years                     Spanish
+## 52                 2nd grade  7-10 years                      French
+## 53               9-12 grades 11-15 years                     Spanish
+## 54               9-12 grades   16+ years                      French
+## 55               9-12 grades   16+ years                      French
+## 56                 4th grade   1-3 years                     English
+## 57                 5th grade 11-15 years                      German</code></pre>
 <pre class="r"><code>#Reorganized years of experience in order on table
 background_survey_1$Experience = factor(background_survey_1$Experience,levels = c(&#39;1-3 years&#39;, &#39;4-6 years&#39;, &#39;7-10 years&#39;, &#39;11-15 years&#39;, &#39;16+ years&#39; ))
 
+background_survey_1$Teaching_Level = factor(background_survey_1$Teaching_Level,levels = c(&#39;Kindergarten&#39;, &#39;1st grade&#39;, &#39;2nd grade&#39;, &#39;3rd grade&#39;, &#39;4th grade&#39;, &#39;5th grade&#39;, &#39;6-8 grades&#39;, &#39;9-12 grades&#39;, &#39;*Kindergarten-12th grades&#39;, &#39;College/University&#39; ))
+  
+  
 
-table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) </code></pre>
+#table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
+table1(~Age + Ethnicity + Experience + Residence + Teaching_Level | Gender , data = background_survey_1)</code></pre>
 <div class="Rtable1"><table class="Rtable1">
 <thead>
 <tr>
@@ -990,24 +994,6 @@ table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_su
 </tr>
 </thead>
 <tbody>
-<tr>
-<td class='rowlabel firstrow'>Bilingual</td>
-<td class='firstrow'></td>
-<td class='firstrow'></td>
-<td class='firstrow'></td>
-</tr>
-<tr>
-<td class='rowlabel'>Mean (SD)</td>
-<td>0.333 (0.478)</td>
-<td>0.429 (0.507)</td>
-<td>0.368 (0.487)</td>
-</tr>
-<tr>
-<td class='rowlabel lastrow'>Median [Min, Max]</td>
-<td class='lastrow'>0 [0, 1.00]</td>
-<td class='lastrow'>0 [0, 1.00]</td>
-<td class='lastrow'>0 [0, 1.00]</td>
-</tr>
 <tr>
 <td class='rowlabel firstrow'>Age</td>
 <td class='firstrow'></td>
@@ -1104,10 +1090,118 @@ table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_su
 <td class='lastrow'>5 (23.8%)</td>
 <td class='lastrow'>17 (29.8%)</td>
 </tr>
+<tr>
+<td class='rowlabel firstrow'>Residence</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Netherlands</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>South Africa</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Spain</td>
+<td>2 (5.6%)</td>
+<td>1 (4.8%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>United Kingdom</td>
+<td>16 (44.4%)</td>
+<td>6 (28.6%)</td>
+<td>22 (38.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>USA</td>
+<td>15 (41.7%)</td>
+<td>7 (33.3%)</td>
+<td>22 (38.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Mexico</td>
+<td class='lastrow'>0 (0%)</td>
+<td class='lastrow'>6 (28.6%)</td>
+<td class='lastrow'>6 (10.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'>Teaching_Level</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Kindergarten</td>
+<td>5 (13.9%)</td>
+<td>1 (4.8%)</td>
+<td>6 (10.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>1st grade</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>2nd grade</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>3rd grade</td>
+<td>2 (5.6%)</td>
+<td>0 (0%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>4th grade</td>
+<td>1 (2.8%)</td>
+<td>2 (9.5%)</td>
+<td>3 (5.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>5th grade</td>
+<td>1 (2.8%)</td>
+<td>1 (4.8%)</td>
+<td>2 (3.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>6-8 grades</td>
+<td>6 (16.7%)</td>
+<td>2 (9.5%)</td>
+<td>8 (14.0%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>9-12 grades</td>
+<td>11 (30.6%)</td>
+<td>6 (28.6%)</td>
+<td>17 (29.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>*Kindergarten-12th grades</td>
+<td>1 (2.8%)</td>
+<td>0 (0%)</td>
+<td>1 (1.8%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>College/University</td>
+<td class='lastrow'>7 (19.4%)</td>
+<td class='lastrow'>8 (38.1%)</td>
+<td class='lastrow'>15 (26.3%)</td>
+</tr>
 </tbody>
 </table>
 </div>
-<pre class="r"><code>table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = &quot;Rtable1-grid&quot;)</code></pre>
+<pre class="r"><code>table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = &quot;Rtable1-grid&quot;) # Puts table in square</code></pre>
 <div class="Rtable1"><table class="Rtable1-grid">
 <thead>
 <tr>
@@ -1277,13 +1371,19 @@ table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_su
 <td class='firstrow'></td>
 </tr>
 <tr>
+<td class='rowlabel'>Kindergarten</td>
+<td>5 (13.9%)</td>
+<td>1 (4.8%)</td>
+<td>6 (10.5%)</td>
+</tr>
+<tr>
 <td class='rowlabel'>1st grade</td>
 <td>1 (2.8%)</td>
 <td>0 (0%)</td>
 <td>1 (1.8%)</td>
 </tr>
 <tr>
-<td class='rowlabel'>2nd  grade</td>
+<td class='rowlabel'>2nd grade</td>
 <td>1 (2.8%)</td>
 <td>1 (4.8%)</td>
 <td>2 (3.5%)</td>
@@ -1313,28 +1413,22 @@ table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_su
 <td>8 (14.0%)</td>
 </tr>
 <tr>
-<td class='rowlabel'>9-12 grade</td>
+<td class='rowlabel'>9-12 grades</td>
 <td>11 (30.6%)</td>
 <td>6 (28.6%)</td>
 <td>17 (29.8%)</td>
 </tr>
 <tr>
-<td class='rowlabel'>College/University</td>
-<td>7 (19.4%)</td>
-<td>8 (38.1%)</td>
-<td>15 (26.3%)</td>
-</tr>
-<tr>
-<td class='rowlabel'>grade 0-12</td>
+<td class='rowlabel'>*Kindergarten-12th grades</td>
 <td>1 (2.8%)</td>
 <td>0 (0%)</td>
 <td>1 (1.8%)</td>
 </tr>
 <tr>
-<td class='rowlabel lastrow'>Kindergarten</td>
-<td class='lastrow'>5 (13.9%)</td>
-<td class='lastrow'>1 (4.8%)</td>
-<td class='lastrow'>6 (10.5%)</td>
+<td class='rowlabel lastrow'>College/University</td>
+<td class='lastrow'>7 (19.4%)</td>
+<td class='lastrow'>8 (38.1%)</td>
+<td class='lastrow'>15 (26.3%)</td>
 </tr>
 <tr>
 <td class='rowlabel firstrow'>Experience</td>

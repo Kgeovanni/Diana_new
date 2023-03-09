@@ -1,7 +1,7 @@
 ---
 title: "QP Data Analysis"
 author: "Diana Sanchez"
-date: "January 2023"
+date: "March 2023"
 output:
   html_document: default
   word_document: default
@@ -240,10 +240,14 @@ background_survey_1
 #Reorganized years of experience in order on table
 background_survey_1$Experience = factor(background_survey_1$Experience,levels = c('1-3 years', '4-6 years', '7-10 years', '11-15 years', '16+ years' ))
 
+background_survey_1$Teaching_Level = factor(background_survey_1$Teaching_Level,levels = c('Kindergarten', '1st grade', '2nd grade', '3rd grade', '4th grade', '5th grade', '6-8 grades', '9-12 grades', '*Kindergarten-12th grades', 'College/University' ))
+  
+  
 
-table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
+#table1(~Bilingual + Age + Ethnicity + Experience | Gender , data = background_survey_1) 
+table1(~Age + Ethnicity + Experience + Residence + Teaching_Level | Gender , data = background_survey_1)
 
-table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = "Rtable1-grid")
+table1(~Bilingual + Age+Ethnicity | Gender , data = background_survey_1,topclass = "Rtable1-grid") # Puts table in square
 
 table1(~Bilingual + Residence + Teaching_Level + Experience | Gender , data = background_survey_1) 
 
