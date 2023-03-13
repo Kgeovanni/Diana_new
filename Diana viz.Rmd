@@ -97,7 +97,9 @@ plot(m3)
 
 AIC(m3)
 BIC(m3)
+```
 
+```{r}
 m4 = lm(flanker_correct ~ language + age + IQ, final_df)
 summary(m4)
 
@@ -124,7 +126,9 @@ plot(m6)
 
 AIC(m6)
 BIC(m6)
+```
 
+```{r}
 m7 = lm(backward_correct ~ language + age + IQ, final_df)
 summary(m7)
 
@@ -155,15 +159,13 @@ BIC(m9)
 
 
 
-
-
 ##Plots 
 ```{r}
 plot1 <- final_df %>% 
   ggplot()+
   aes(x = age_z, y=flanker_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 1") + 
+  ggtitle("Flanker and Age") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
@@ -172,7 +174,7 @@ plot2 <- final_df %>%
   ggplot()+
   aes(x = age_z, y=stroop_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 2") + 
+  ggtitle("Stroop and Age") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
@@ -181,7 +183,7 @@ plot3 <- final_df %>%
   ggplot()+
   aes(x = age_z, y=backward_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 3") + 
+  ggtitle("Backward Corsi and Age") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
@@ -196,7 +198,7 @@ plot4 <- final_df %>%
   ggplot()+
   aes(x = iq_z, y=flanker_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 4") + 
+  ggtitle("Flanker and IQ") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
@@ -205,7 +207,7 @@ plot5 <- final_df %>%
   ggplot()+
   aes(x = iq_z, y=stroop_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 5") + 
+  ggtitle("Stroop and IQ") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
@@ -214,7 +216,7 @@ plot6 <- final_df %>%
   ggplot()+
   aes(x = iq_z, y=backward_correct,color=factor(group_language))+
   geom_point(size = 1) +
-  ggtitle("Plot 6") + 
+  ggtitle("Backward Corsi and IQ") + 
   geom_smooth(method = "lm") + 
   labs(color = "Language Group")+
   scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
