@@ -401,22 +401,23 @@ final_df</code></pre>
 ## 55    Language              1  1.15396840 -0.43225856
 ## 56    Language              1  1.15396840  0.78949704
 ## 57    Language              1  0.43001653 -0.16075731</code></pre>
-<pre class="r"><code>m1 = lm(stroop_correct ~ language + age + IQ, final_df)
-summary(m1)</code></pre>
+<pre class="r"><code>colnames(final_df)[7]=&#39;Bilingual&#39;</code></pre>
+<pre class="r"><code>m1 = lm(stroop_correct ~ Bilingual + age + IQ, final_df)
+summary(m1) # 0.003503</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = stroop_correct ~ language + age + IQ, data = final_df)
+## lm(formula = stroop_correct ~ Bilingual + age + IQ, data = final_df)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -28.9090  -1.4450   0.4483   2.1517   7.4656 
 ## 
 ## Coefficients:
-##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         19.26588    5.45452   3.532 0.000863 ***
-## languageNonLanguage -1.12630    1.33686  -0.842 0.403296    
-## age                  0.01747    0.06660   0.262 0.794037    
-## IQ                   0.17148    0.04392   3.904 0.000269 ***
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          19.26588    5.45452   3.532 0.000863 ***
+## BilingualNonLanguage -1.12630    1.33686  -0.842 0.403296    
+## age                   0.01747    0.06660   0.262 0.794037    
+## IQ                    0.17148    0.04392   3.904 0.000269 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -426,30 +427,30 @@ summary(m1)</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m1) </code></pre>
 <p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>AIC(m1)</code></pre>
+<pre class="r"><code>AIC(m1) #346.0536</code></pre>
 <pre><code>## [1] 346.0536</code></pre>
-<pre class="r"><code>BIC(m1)</code></pre>
+<pre class="r"><code>BIC(m1) #356.2689</code></pre>
 <pre><code>## [1] 356.2689</code></pre>
-<pre class="r"><code>m2 = lm(stroop_correct ~ language * age * IQ, final_df)
-summary(m2)</code></pre>
+<pre class="r"><code>m2 = lm(stroop_correct ~ Bilingual * age * IQ, final_df)
+summary(m2) # 0.02313</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = stroop_correct ~ language * age * IQ, data = final_df)
+## lm(formula = stroop_correct ~ Bilingual * age * IQ, data = final_df)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -27.6266  -1.7107   0.6951   1.7593   6.3461 
 ## 
 ## Coefficients:
-##                              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                -34.851654  55.594352  -0.627    0.534
-## languageNonLanguage         24.123858  61.239826   0.394    0.695
-## age                          1.174933   1.283847   0.915    0.365
-## IQ                           0.730347   0.543532   1.344    0.185
-## languageNonLanguage:age     -0.400636   1.440998  -0.278    0.782
-## languageNonLanguage:IQ      -0.309371   0.592649  -0.522    0.604
-## age:IQ                      -0.012016   0.012454  -0.965    0.339
-## languageNonLanguage:age:IQ   0.005445   0.013855   0.393    0.696
+##                               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                 -34.851654  55.594352  -0.627    0.534
+## BilingualNonLanguage         24.123858  61.239826   0.394    0.695
+## age                           1.174933   1.283847   0.915    0.365
+## IQ                            0.730347   0.543532   1.344    0.185
+## BilingualNonLanguage:age     -0.400636   1.440998  -0.278    0.782
+## BilingualNonLanguage:IQ      -0.309371   0.592649  -0.522    0.604
+## age:IQ                       -0.012016   0.012454  -0.965    0.339
+## BilingualNonLanguage:age:IQ   0.005445   0.013855   0.393    0.696
 ## 
 ## Residual standard error: 4.825 on 49 degrees of freedom
 ## Multiple R-squared:  0.2707, Adjusted R-squared:  0.1665 
@@ -457,12 +458,14 @@ summary(m2)</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m2) </code></pre>
 <p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
-<pre class="r"><code>AIC(m2)</code></pre>
+<pre class="r"><code>AIC(m2) # 350.5537</code></pre>
 <pre><code>## [1] 350.5537</code></pre>
-<pre class="r"><code>BIC(m2)</code></pre>
+<pre class="r"><code>BIC(m2) # 368.9412</code></pre>
 <pre><code>## [1] 368.9412</code></pre>
-<pre class="r"><code>m3 = lm(stroop_correct~group_language * age_z * iq_z, final_df)
-summary(m3)</code></pre>
+<pre class="r"><code># #Based on this output, we see that the AIC and BIC statistics are close but lower for m1 than for m2. This implies that the model fits are sufficiently close that neither can be preferred over the other.
+
+m3 = lm(stroop_correct~group_language * age_z * iq_z, final_df)
+summary(m3) # 0.02313</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = stroop_correct ~ group_language * age_z * iq_z, 
@@ -491,47 +494,116 @@ summary(m3)</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m3) </code></pre>
 <p><img src="Diana-viz_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
-<pre class="r"><code>AIC(m3)</code></pre>
+<pre class="r"><code>AIC(m3) # 350.5537</code></pre>
 <pre><code>## [1] 350.5537</code></pre>
-<pre class="r"><code>BIC(m3)</code></pre>
+<pre class="r"><code>BIC(m3) # 368.9412</code></pre>
 <pre><code>## [1] 368.9412</code></pre>
+<pre class="r"><code># The confidence intervals for AIC and BIC differences are exactly the same for m2 and m3 because both models have the same numbers of parameters.</code></pre>
+<pre class="r"><code>models = list(m1, m2, m3) # put models in a list
+model.names = c(&#39;model 1&#39;, &#39;model 2&#39;, &#39;model 3&#39;) # named models for the AIC table
+aictab(cand.set = models, modnames = model.names)</code></pre>
+<pre><code>## 
+## Model selection based on AICc:
+## 
+##         K   AICc Delta_AICc AICcWt Cum.Wt      LL
+## model 1 5 347.23       0.00   0.95   0.95 -168.03
+## model 2 9 354.38       7.15   0.03   0.97 -166.28
+## model 3 9 354.38       7.15   0.03   1.00 -166.28</code></pre>
 </div>
 <div id="nested-model-comparisons" class="section level1">
 <h1>Nested Model Comparisons</h1>
 <pre class="r"><code>anova(m1, m2, m3)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: stroop_correct ~ language + age + IQ
-## Model 2: stroop_correct ~ language * age * IQ
+## Model 1: stroop_correct ~ Bilingual + age + IQ
+## Model 2: stroop_correct ~ Bilingual * age * IQ
 ## Model 3: stroop_correct ~ group_language * age_z * iq_z
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     53 1213.0                           
 ## 2     49 1140.8  4    72.239 0.7757 0.5463
 ## 3     49 1140.8  0     0.000</code></pre>
-<pre class="r"><code>anova(m1, m3)</code></pre>
+<pre class="r"><code>anova(m1, m2) # reject model 2</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: stroop_correct ~ language + age + IQ
+## Model 1: stroop_correct ~ Bilingual + age + IQ
+## Model 2: stroop_correct ~ Bilingual * age * IQ
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     53 1213.0                           
+## 2     49 1140.8  4    72.239 0.7757 0.5463</code></pre>
+<pre class="r"><code>anova(m2, m3) # no pvalue</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: stroop_correct ~ Bilingual * age * IQ
+## Model 2: stroop_correct ~ group_language * age_z * iq_z
+##   Res.Df    RSS Df   Sum of Sq F Pr(&gt;F)
+## 1     49 1140.8                        
+## 2     49 1140.8  0 -1.1369e-12</code></pre>
+<pre class="r"><code>anova(m1, m3) # reject model 3</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: stroop_correct ~ Bilingual + age + IQ
 ## Model 2: stroop_correct ~ group_language * age_z * iq_z
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     53 1213.0                           
 ## 2     49 1140.8  4    72.239 0.7757 0.5463</code></pre>
-<pre class="r"><code>m4 = lm(flanker_correct ~ language + age + IQ, final_df)
+</div>
+<div id="anova-table" class="section level1">
+<h1>ANOVA table</h1>
+<pre class="r"><code>anova_results1 = anova(m1, m2, m3)
+anova_table1 = tidy(anova_results1)</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `term`.</code></pre>
+<pre class="r"><code>print(anova_table1)</code></pre>
+<pre><code>## # A tibble: 3 × 7
+##   term                             df.re…¹   rss    df     sumsq stati…² p.value
+##   &lt;chr&gt;                              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 stroop_correct ~ Bilingual + ag…      53 1213.    NA NA         NA      NA    
+## 2 stroop_correct ~ Bilingual * ag…      49 1141.     4  7.22e+ 1   0.776   0.546
+## 3 stroop_correct ~ group_language…      49 1141.     0 -1.14e-12  NA      NA    
+## # … with abbreviated variable names ¹​df.residual, ²​statistic</code></pre>
+<pre class="r"><code>jtest(m1,m2) # for nonnested model comparison</code></pre>
+<pre><code>## J test
+## 
+## Model 1: stroop_correct ~ Bilingual + age + IQ
+## Model 2: stroop_correct ~ Bilingual * age * IQ
+##                 Estimate Std. Error t value Pr(&gt;|t|)  
+## M1 + fitted(M2)        1    0.55107  1.8146  0.07535 .
+## M2 + fitted(M1)                                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>jtest(m1,m3)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: stroop_correct ~ Bilingual + age + IQ
+## Model 2: stroop_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value Pr(&gt;|t|)  
+## M1 + fitted(M2)        1    0.55107  1.8146  0.07535 .
+## M2 + fitted(M1)                                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>jtest(m2,m3)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: stroop_correct ~ Bilingual * age * IQ
+## Model 2: stroop_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value Pr(&gt;|t|)
+## M1 + fitted(M2)                                     
+## M2 + fitted(M1)</code></pre>
+<pre class="r"><code>m4 = lm(flanker_correct ~ Bilingual + age + IQ, final_df)
 summary(m4)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = flanker_correct ~ language + age + IQ, data = final_df)
+## lm(formula = flanker_correct ~ Bilingual + age + IQ, data = final_df)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -16.9139  -0.5606   1.5643   3.9369   9.1517 
 ## 
 ## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         27.542177   6.980919   3.945 0.000236 ***
-## languageNonLanguage -1.040873   1.710965  -0.608 0.545551    
-## age                 -0.008293   0.085231  -0.097 0.922856    
-## IQ                   0.151233   0.056212   2.690 0.009524 ** 
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.542177   6.980919   3.945 0.000236 ***
+## BilingualNonLanguage -1.040873   1.710965  -0.608 0.545551    
+## age                  -0.008293   0.085231  -0.097 0.922856    
+## IQ                    0.151233   0.056212   2.690 0.009524 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -540,31 +612,31 @@ summary(m4)</code></pre>
 ## F-statistic: 2.437 on 3 and 53 DF,  p-value: 0.07474</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m4) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<pre class="r"><code>AIC(m4)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>AIC(m4) # 374.1816</code></pre>
 <pre><code>## [1] 374.1816</code></pre>
-<pre class="r"><code>BIC(m4)</code></pre>
+<pre class="r"><code>BIC(m4) # 384.3969</code></pre>
 <pre><code>## [1] 384.3969</code></pre>
-<pre class="r"><code>m5 = lm(flanker_correct ~ language * age * IQ, final_df)
+<pre class="r"><code>m5 = lm(flanker_correct ~ Bilingual * age * IQ, final_df)
 summary(m5)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = flanker_correct ~ language * age * IQ, data = final_df)
+## lm(formula = flanker_correct ~ Bilingual * age * IQ, data = final_df)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -16.0944  -1.5240   0.8959   3.2258   6.8063 
 ## 
 ## Coefficients:
-##                              Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)                 133.41338   65.90252   2.024  0.04840 * 
-## languageNonLanguage        -172.21956   72.59476  -2.372  0.02165 * 
-## age                          -2.97699    1.52189  -1.956  0.05617 . 
-## IQ                           -0.82752    0.64431  -1.284  0.20506   
-## languageNonLanguage:age       4.73049    1.70818   2.769  0.00791 **
-## languageNonLanguage:IQ        1.55709    0.70254   2.216  0.03134 * 
-## age:IQ                        0.02745    0.01476   1.859  0.06900 . 
-## languageNonLanguage:age:IQ   -0.04314    0.01642  -2.627  0.01147 * 
+##                               Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)                  133.41338   65.90252   2.024  0.04840 * 
+## BilingualNonLanguage        -172.21956   72.59476  -2.372  0.02165 * 
+## age                           -2.97699    1.52189  -1.956  0.05617 . 
+## IQ                            -0.82752    0.64431  -1.284  0.20506   
+## BilingualNonLanguage:age       4.73049    1.70818   2.769  0.00791 **
+## BilingualNonLanguage:IQ        1.55709    0.70254   2.216  0.03134 * 
+## age:IQ                         0.02745    0.01476   1.859  0.06900 . 
+## BilingualNonLanguage:age:IQ   -0.04314    0.01642  -2.627  0.01147 * 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -573,10 +645,10 @@ summary(m5)</code></pre>
 ## F-statistic: 2.873 on 7 and 49 DF,  p-value: 0.01353</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m5) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
-<pre class="r"><code>AIC(m5)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<pre class="r"><code>AIC(m5) # 369.9446</code></pre>
 <pre><code>## [1] 369.9446</code></pre>
-<pre class="r"><code>BIC(m5)</code></pre>
+<pre class="r"><code>BIC(m5) # 388.332</code></pre>
 <pre><code>## [1] 388.332</code></pre>
 <pre class="r"><code>m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df)
 summary(m6)</code></pre>
@@ -607,17 +679,29 @@ summary(m6)</code></pre>
 ## F-statistic: 2.873 on 7 and 49 DF,  p-value: 0.01353</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m6) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
-<pre class="r"><code>AIC(m6)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+<pre class="r"><code>AIC(m6) # 369.9446</code></pre>
 <pre><code>## [1] 369.9446</code></pre>
-<pre class="r"><code>BIC(m6)</code></pre>
+<pre class="r"><code>BIC(m6) # 388.332</code></pre>
 <pre><code>## [1] 388.332</code></pre>
-<p>#Nested Model Comparisons</p>
+<pre class="r"><code>models = list(m4, m5, m6) # put models in a list
+model.names = c(&#39;model 4&#39;, &#39;model 5&#39;, &#39;model 6&#39;) # named models for the AIC table
+aictab(cand.set = models, modnames = model.names)</code></pre>
+<pre><code>## Warning in aictab.AIClm(cand.set = models, modnames = model.names): 
+## Check model structure carefully as some models may be redundant</code></pre>
+<pre><code>## 
+## Model selection based on AICc:
+## 
+##         K   AICc Delta_AICc AICcWt Cum.Wt      LL
+## model 5 9 373.77       0.00   0.41   0.41 -175.97
+## model 6 9 373.77       0.00   0.41   0.82 -175.97
+## model 4 5 375.36       1.58   0.18   1.00 -182.09</code></pre>
+<p>#Nested Model Comparisons using anova()</p>
 <pre class="r"><code>anova(m4, m5, m6)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: flanker_correct ~ language + age + IQ
-## Model 2: flanker_correct ~ language * age * IQ
+## Model 1: flanker_correct ~ Bilingual + age + IQ
+## Model 2: flanker_correct ~ Bilingual * age * IQ
 ## Model 3: flanker_correct ~ group_language * age_z * iq_z
 ##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
 ## 1     53 1986.9                              
@@ -625,22 +709,92 @@ plot(m6) </code></pre>
 ## 3     49 1603.0  0      0.00                 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>m7 = lm(backward_correct ~ language + age + IQ, final_df)
+<pre class="r"><code>anova(m4, m5) # reject model 4</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: flanker_correct ~ Bilingual + age + IQ
+## Model 2: flanker_correct ~ Bilingual * age * IQ
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     53 1986.9                              
+## 2     49 1603.0  4    383.88 2.9335 0.02979 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(m5, m6) # no pvalue</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: flanker_correct ~ Bilingual * age * IQ
+## Model 2: flanker_correct ~ group_language * age_z * iq_z
+##   Res.Df  RSS Df   Sum of Sq F Pr(&gt;F)
+## 1     49 1603                        
+## 2     49 1603  0 -2.2737e-12</code></pre>
+<pre class="r"><code>anova(m4, m6) # reject model 4</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: flanker_correct ~ Bilingual + age + IQ
+## Model 2: flanker_correct ~ group_language * age_z * iq_z
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     53 1986.9                              
+## 2     49 1603.0  4    383.88 2.9335 0.02979 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova_results2 = anova(m4, m5, m6)
+anova_table2 = tidy(anova_results1)</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `term`.</code></pre>
+<pre class="r"><code>print(anova_table2)</code></pre>
+<pre><code>## # A tibble: 3 × 7
+##   term                             df.re…¹   rss    df     sumsq stati…² p.value
+##   &lt;chr&gt;                              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 stroop_correct ~ Bilingual + ag…      53 1213.    NA NA         NA      NA    
+## 2 stroop_correct ~ Bilingual * ag…      49 1141.     4  7.22e+ 1   0.776   0.546
+## 3 stroop_correct ~ group_language…      49 1141.     0 -1.14e-12  NA      NA    
+## # … with abbreviated variable names ¹​df.residual, ²​statistic</code></pre>
+</div>
+<div id="nested-model-comparisons-using-jtest" class="section level1">
+<h1>Nested Model Comparisons using jtest</h1>
+<pre class="r"><code>jtest(m4,m5) # for nonnested model comparison</code></pre>
+<pre><code>## J test
+## 
+## Model 1: flanker_correct ~ Bilingual + age + IQ
+## Model 2: flanker_correct ~ Bilingual * age * IQ
+##                 Estimate Std. Error t value  Pr(&gt;|t|)    
+## M1 + fitted(M2)        1    0.28338  3.5288 0.0008827 ***
+## M2 + fitted(M1)                                          
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>jtest(m5,m6)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: flanker_correct ~ Bilingual * age * IQ
+## Model 2: flanker_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value Pr(&gt;|t|)
+## M1 + fitted(M2)                                     
+## M2 + fitted(M1)</code></pre>
+<pre class="r"><code>jtest(m4,m6)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: flanker_correct ~ Bilingual + age + IQ
+## Model 2: flanker_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value  Pr(&gt;|t|)    
+## M1 + fitted(M2)        1    0.28338  3.5288 0.0008827 ***
+## M2 + fitted(M1)                                          
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>m7 = lm(backward_correct ~ Bilingual + age + IQ, final_df)
 summary(m7)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = backward_correct ~ language + age + IQ, data = final_df)
+## lm(formula = backward_correct ~ Bilingual + age + IQ, data = final_df)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
 ## -3.5658 -1.1355  0.3708  1.3338  2.7237 
 ## 
 ## Coefficients:
-##                     Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)         -1.58113    2.09704  -0.754  0.45420   
-## languageNonLanguage -0.66269    0.51397  -1.289  0.20287   
-## age                 -0.01670    0.02560  -0.652  0.51694   
-## IQ                   0.05492    0.01689   3.252  0.00199 **
+##                      Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)          -1.58113    2.09704  -0.754  0.45420   
+## BilingualNonLanguage -0.66269    0.51397  -1.289  0.20287   
+## age                  -0.01670    0.02560  -0.652  0.51694   
+## IQ                    0.05492    0.01689   3.252  0.00199 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -649,41 +803,41 @@ summary(m7)</code></pre>
 ## F-statistic:   3.9 on 3 and 53 DF,  p-value: 0.01365</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m7) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code>AIC(m7)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>AIC(m7) # 237.0792</code></pre>
 <pre><code>## [1] 237.0792</code></pre>
-<pre class="r"><code>BIC(m7)</code></pre>
+<pre class="r"><code>BIC(m7) # 247.2945</code></pre>
 <pre><code>## [1] 247.2945</code></pre>
-<pre class="r"><code>m8 = lm(backward_correct ~ language * age * IQ, final_df)
+<pre class="r"><code>m8 = lm(backward_correct ~ Bilingual * age * IQ, final_df)
 summary(m8)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = backward_correct ~ language * age * IQ, data = final_df)
+## lm(formula = backward_correct ~ Bilingual * age * IQ, data = final_df)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
 ## -3.3708 -0.9030  0.3664  1.2865  2.6573 
 ## 
 ## Coefficients:
-##                              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                -19.477333  20.661594  -0.943    0.350
-## languageNonLanguage         17.863973  22.759730   0.785    0.436
-## age                          0.150131   0.477141   0.315    0.754
-## IQ                           0.243535   0.202003   1.206    0.234
-## languageNonLanguage:age     -0.140852   0.535546  -0.263    0.794
-## languageNonLanguage:IQ      -0.198303   0.220258  -0.900    0.372
-## age:IQ                      -0.001991   0.004629  -0.430    0.669
-## languageNonLanguage:age:IQ   0.001851   0.005149   0.360    0.721
+##                               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                 -19.477333  20.661594  -0.943    0.350
+## BilingualNonLanguage         17.863973  22.759730   0.785    0.436
+## age                           0.150131   0.477141   0.315    0.754
+## IQ                            0.243535   0.202003   1.206    0.234
+## BilingualNonLanguage:age     -0.140852   0.535546  -0.263    0.794
+## BilingualNonLanguage:IQ      -0.198303   0.220258  -0.900    0.372
+## age:IQ                       -0.001991   0.004629  -0.430    0.669
+## BilingualNonLanguage:age:IQ   0.001851   0.005149   0.360    0.721
 ## 
 ## Residual standard error: 1.793 on 49 degrees of freedom
 ## Multiple R-squared:  0.2801, Adjusted R-squared:  0.1773 
 ## F-statistic: 2.724 on 7 and 49 DF,  p-value: 0.01811</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m8) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
-<pre class="r"><code>AIC(m8)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code>AIC(m8) # 237.716</code></pre>
 <pre><code>## [1] 237.716</code></pre>
-<pre class="r"><code>BIC(m8)</code></pre>
+<pre class="r"><code>BIC(m8) # 256.1034</code></pre>
 <pre><code>## [1] 256.1034</code></pre>
 <pre class="r"><code>m9 = lm(backward_correct~group_language * age_z * iq_z, final_df)
 summary(m9)</code></pre>
@@ -714,22 +868,86 @@ summary(m9)</code></pre>
 ## F-statistic: 2.724 on 7 and 49 DF,  p-value: 0.01811</code></pre>
 <pre class="r"><code>par(mfrow = c(2,2)) 
 plot(m9) </code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
-<pre class="r"><code>AIC(m9)</code></pre>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
+<pre class="r"><code>AIC(m9) # 237.716</code></pre>
 <pre><code>## [1] 237.716</code></pre>
-<pre class="r"><code>BIC(m9)</code></pre>
+<pre class="r"><code>BIC(m9) # 256.1034</code></pre>
 <pre><code>## [1] 256.1034</code></pre>
-<p>#Nested Model Comparisons</p>
+<pre class="r"><code>models = list(m7, m8, m9) # put models in a list
+model.names = c(&#39;model 7&#39;, &#39;model 8&#39;, &#39;model 9&#39;) # named models for the AIC table
+aictab(cand.set = models, modnames = model.names)</code></pre>
+<pre><code>## 
+## Model selection based on AICc:
+## 
+##         K   AICc Delta_AICc AICcWt Cum.Wt      LL
+## model 7 5 238.26       0.00   0.72   0.72 -113.54
+## model 9 9 241.55       3.29   0.14   0.86 -109.86
+## model 8 9 241.55       3.29   0.14   1.00 -109.86</code></pre>
+</div>
+<div id="nested-model-comparisons-1" class="section level1">
+<h1>Nested Model Comparisons</h1>
 <pre class="r"><code>anova(m7, m8, m9)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: backward_correct ~ language + age + IQ
-## Model 2: backward_correct ~ language * age * IQ
+## Model 1: backward_correct ~ Bilingual + age + IQ
+## Model 2: backward_correct ~ Bilingual * age * IQ
 ## Model 3: backward_correct ~ group_language * age_z * iq_z
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     53 179.29                           
 ## 2     49 157.56  4    21.727 1.6892 0.1676
 ## 3     49 157.56  0     0.000</code></pre>
+<pre class="r"><code>anova(m7, m8) # reject model 8</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: backward_correct ~ Bilingual + age + IQ
+## Model 2: backward_correct ~ Bilingual * age * IQ
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     53 179.29                           
+## 2     49 157.56  4    21.727 1.6892 0.1676</code></pre>
+<pre class="r"><code>anova(m7, m9) # reject model 9</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: backward_correct ~ Bilingual + age + IQ
+## Model 2: backward_correct ~ group_language * age_z * iq_z
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     53 179.29                           
+## 2     49 157.56  4    21.727 1.6892 0.1676</code></pre>
+<pre class="r"><code>anova(m8, m9) # no pvalue,  </code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: backward_correct ~ Bilingual * age * IQ
+## Model 2: backward_correct ~ group_language * age_z * iq_z
+##   Res.Df    RSS Df  Sum of Sq F Pr(&gt;F)
+## 1     49 157.56                       
+## 2     49 157.56  0 2.2737e-13</code></pre>
+<pre class="r"><code>jtest(m7,m8) # for nonnested model comparison</code></pre>
+<pre><code>## J test
+## 
+## Model 1: backward_correct ~ Bilingual + age + IQ
+## Model 2: backward_correct ~ Bilingual * age * IQ
+##                 Estimate Std. Error t value Pr(&gt;|t|)   
+## M1 + fitted(M2)        1    0.37344  2.6778 0.009895 **
+## M2 + fitted(M1)                                        
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>jtest(m8,m9)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: backward_correct ~ Bilingual * age * IQ
+## Model 2: backward_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value Pr(&gt;|t|)
+## M1 + fitted(M2)                                     
+## M2 + fitted(M1)</code></pre>
+<pre class="r"><code>jtest(m7,m9)</code></pre>
+<pre><code>## J test
+## 
+## Model 1: backward_correct ~ Bilingual + age + IQ
+## Model 2: backward_correct ~ group_language * age_z * iq_z
+##                 Estimate Std. Error t value Pr(&gt;|t|)   
+## M1 + fitted(M2)        1    0.37344  2.6778 0.009895 **
+## M2 + fitted(M1)                                        
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>##Plots</p>
 <pre class="r"><code>plot1 &lt;- final_df %&gt;% 
   ggplot()+
@@ -764,7 +982,7 @@ plot1 / plot2  / plot3 </code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
 ## `geom_smooth()` using formula &#39;y ~ x&#39;
 ## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>plot4 &lt;- final_df %&gt;% 
   ggplot()+
   aes(x = iq_z, y=flanker_correct,color=factor(group_language))+
@@ -793,11 +1011,11 @@ plot6 &lt;- final_df %&gt;%
   scale_color_manual(labels = c(&quot;NonLanguage&quot;,&quot;Language&quot;),values = c(&quot;red&quot;,&quot;blue&quot;))
 
 library(patchwork)
-plot4 + plot5 + plot6</code></pre>
+plot4 / plot5 / plot6</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
 ## `geom_smooth()` using formula &#39;y ~ x&#39;
 ## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="Diana-viz_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="Diana-viz_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <pre class="r"><code>plot_layout(ncol = 2)</code></pre>
 <pre><code>## $ncol
 ## [1] 2
