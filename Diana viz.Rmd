@@ -74,8 +74,128 @@ final_df
 colnames(final_df)[7]='Bilingual'
 ```
 
+## MODELS UPDATED March 27
+# STROOP: Regression and Nested Model Comparison
 ```{r}
-m1 = lm(stroop_correct ~ Bilingual + age + IQ, final_df)
+mod_0 <- lm(stroop_correct ~ group_language, final_df)
+summary(mod_0)
+
+AIC(mod_0) # 356.4777
+BIC(mod_0) # 362.6068
+```
+
+```{r}
+mod_1 <- lm(stroop_correct ~ group_language + age, final_df)
+summary(mod_1)
+
+AIC(mod_1) # 358.4629
+BIC(mod_1) # 366.6351
+```
+
+```{r}
+mod_2 <- lm(stroop_correct ~ group_language + age + IQ, final_df)
+summary(mod_2)
+
+AIC(mod_2) # 346.0536
+BIC(mod_2) # 356.2689
+```
+
+```{r}
+mod_3 <- lm(stroop_correct ~ group_language * age * IQ, final_df)
+summary(mod_3)
+
+AIC(mod_3) # 350.5537
+BIC(mod_3) # 368.9412
+```
+
+```{r}
+mod_4 <- lm(stroop_correct ~ group_language * age_z * iq_z, final_df)
+summary(mod_4)
+
+AIC(mod_4) # 350.5537
+BIC(mod_4) # 368.9412
+```
+
+```{r}
+anova(mod_2,mod_3)
+anova(mod_0,mod_1)
+
+anova(mod_3, mod_4)
+```
+
+```{r}
+models = list(mod_0, mod_1, mod_2, mod_3, mod_4) # put models in a list
+model.names = c('model 0','model 1', 'model 2', 'model 3', 'model 4') # named models for the AIC table
+aictab(cand.set = models, modnames = model.names)
+##It states that Model 2 is the best for Stroop
+```
+
+
+
+# FLANKER: Regression and Nested Model Comparison
+```{r}
+mod_5 <- lm(flanker_correct ~ group_language, final_df)
+summary(mod_5)
+
+AIC(mod_5) # 356.4777
+BIC(mod_5) # 362.6068
+```
+
+```{r}
+mod_6 <- lm(flanker_correct ~ group_language + age, final_df)
+summary(mod_6)
+
+AIC(mod_6) # 358.4629
+BIC(mod_6) # 366.6351
+```
+
+```{r}
+mod_7 <- lm(flanker_correct ~ group_language + age + IQ, final_df)
+summary(mod_7)
+
+AIC(mod_7) # 346.0536
+BIC(mod_7) # 356.2689
+```
+
+```{r}
+mod_8 <- lm(flanker_correct ~ group_language * age * IQ, final_df)
+summary(mod_8)
+
+AIC(mod_8) # 350.5537
+BIC(mod_8) # 368.9412
+```
+
+```{r}
+mod_9 <- lm(flanker_correct ~ group_language * age_z * iq_z, final_df)
+summary(mod_9)
+
+AIC(mod_9) # 350.5537
+BIC(mod_9) # 368.9412
+```
+
+```{r}
+anova(mod_5,mod_6)
+anova(mod_6,mod_7)
+anova(mod_7,mod_8)
+
+anova(mod_8, mod_9)
+```
+
+```{r}
+models = list(mod_5, mod_6, mod_7, mod_8, mod_9) # put models in a list
+model.names = c('model 5','model 6', 'model 7', 'model 8', 'model 9') # named models for the AIC table
+aictab(cand.set = models, modnames = model.names)
+##It states that Model 2 is the best for Stroop
+```
+
+
+
+
+
+
+############################# OLD DATA ######################################
+```{r}
+m1 = lm(stroop_correct ~ group_language + age + IQ, final_df)
 summary(m1) # 0.003503
 
 par(mfrow = c(2,2)) 
@@ -85,7 +205,7 @@ AIC(m1) #346.0536
 BIC(m1) #356.2689
 
 
-m2 = lm(stroop_correct ~ Bilingual * age * IQ, final_df)
+m2 = lm(stroop_correct ~ group_language * age * IQ, final_df)
 summary(m2) # 0.02313
 
 par(mfrow = c(2,2)) 
@@ -144,7 +264,7 @@ jtest(m2,m3)
 
 
 ```{r}
-m4 = lm(flanker_correct ~ Bilingual + age + IQ, final_df)
+m4 = lm(flanker_correct ~ group_language + age + IQ, final_df)
 summary(m4)
 
 par(mfrow = c(2,2)) 
@@ -153,7 +273,7 @@ plot(m4)
 AIC(m4) # 374.1816
 BIC(m4) # 384.3969
 
-m5 = lm(flanker_correct ~ Bilingual * age * IQ, final_df)
+m5 = lm(flanker_correct ~ group_language * age * IQ, final_df)
 summary(m5)
 
 par(mfrow = c(2,2)) 
@@ -162,7 +282,7 @@ plot(m5)
 AIC(m5) # 369.9446
 BIC(m5) # 388.332
 
-m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df)
+m6 = lm(flanker_correct~group_language * age_z * iq_z, final_df) #BEST model
 summary(m6)
 
 par(mfrow = c(2,2)) 
@@ -191,7 +311,7 @@ anova(m4, m6) # reject model 4
 
 ```{r}
 anova_results2 = anova(m4, m5, m6)
-anova_table2 = tidy(anova_results1)
+anova_table2 = tidy(anova_results2)
 print(anova_table2)
 
 ```
@@ -206,7 +326,7 @@ jtest(m4,m6)
 ```
 
 ```{r}
-m7 = lm(backward_correct ~ Bilingual + age + IQ, final_df)
+m7 = lm(backward_correct ~ group_language + age + IQ, final_df)
 summary(m7)
 
 par(mfrow = c(2,2)) 
@@ -215,7 +335,7 @@ plot(m7)
 AIC(m7) # 237.0792
 BIC(m7) # 247.2945
 
-m8 = lm(backward_correct ~ Bilingual * age * IQ, final_df)
+m8 = lm(backward_correct ~ group_language * age * IQ, final_df)
 summary(m8)
 
 par(mfrow = c(2,2)) 
@@ -326,6 +446,35 @@ library(patchwork)
 plot4 / plot5 / plot6
 plot_layout(ncol = 2)
 ```
+
+# plots Model 1 for Stroop task (best model)
+```{r} 
+plot7 <- final_df %>% 
+  ggplot()+
+  aes(x = age, y=flanker_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Flanker and Age") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot7
+
+
+plot8 <- final_df %>% 
+  ggplot()+
+  aes(x = IQ, y=backward_correct,color=factor(group_language))+
+  geom_point(size = 1) +
+  ggtitle("Backward Corsi and IQ") + 
+  geom_smooth(method = "lm") + 
+  labs(color = "Language Group")+
+  scale_color_manual(labels = c("NonLanguage","Language"),values = c("red","blue"))
+
+plot8
+```
+
+
+
 
 
 ## Background Questionnaire
