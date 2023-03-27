@@ -121,7 +121,7 @@ anova(mod_2,mod_3) # Model 2 significant
 anova(mod_1,mod_2) # Model 2 significant
 anova(mod_0,mod_1) # Model 1 significant
 
-anova(mod_3, mod_4)
+anova(mod_3, mod_4) #Model 4 is standardized model
 ```
 
 ```{r}
@@ -180,7 +180,7 @@ anova(mod_7,mod_8) # Model 8 significant
 anova(mod_6,mod_7) # Model 7 significant
 anova(mod_5,mod_6) # Model 5 significant
 
-anova(mod_8, mod_9) # this has the standerdized scores
+anova(mod_8, mod_9) # Model 9 is standardized model
 ```
 
 ```{r}
@@ -237,7 +237,7 @@ anova(mod_12,mod_13) # Model 12 significant
 anova(mod_11,mod_12) # Model 12 significant
 anova(mod_10,mod_11) # Model 10 significant
 
-anova(mod_13, mod_14) # this has the standerdized scores
+anova(mod_13, mod_14) # Model 14 is standardized model
 ```
 
 ```{r}

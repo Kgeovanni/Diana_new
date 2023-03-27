@@ -570,7 +570,7 @@ summary(mod_4)</code></pre>
 ##   Res.Df    RSS Df Sum of Sq     F Pr(&gt;F)
 ## 1     55 1562.3                          
 ## 2     54 1561.9  1   0.40451 0.014 0.9063</code></pre>
-<pre class="r"><code>anova(mod_3, mod_4)</code></pre>
+<pre class="r"><code>anova(mod_3, mod_4) #Model 4 is standardized model</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: stroop_correct ~ group_language * age * IQ
@@ -758,7 +758,7 @@ summary(mod_9)</code></pre>
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     55 2259.5                           
 ## 2     54 2258.2  1     1.306 0.0312 0.8604</code></pre>
-<pre class="r"><code>anova(mod_8, mod_9) # this has the standerdized scores</code></pre>
+<pre class="r"><code>anova(mod_8, mod_9) # Model 9 is standardized model</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: flanker_correct ~ group_language * age * IQ
@@ -942,7 +942,7 @@ summary(mod_14)</code></pre>
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     55 217.03                           
 ## 2     54 215.07  1    1.9578 0.4916 0.4862</code></pre>
-<pre class="r"><code>anova(mod_13, mod_14) # this has the standerdized scores</code></pre>
+<pre class="r"><code>anova(mod_13, mod_14) # Model 14 is standardized model</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: backward_correct ~ group_language * age * IQ
