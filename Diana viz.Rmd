@@ -187,7 +187,7 @@ anova(mod_8, mod_9) # this has the standerdized scores
 models = list(mod_5, mod_6, mod_7, mod_8, mod_9) # put models in a list
 model.names = c('model 5','model 6', 'model 7', 'model 8', 'model 9') # named models for the AIC table
 aictab(cand.set = models, modnames = model.names)
-##It states that Model 2 is the best for Stroop
+##It states that Model 8, 9 is the best for Flanker (9 is the standarized model)
 ```
 
 
@@ -244,6 +244,7 @@ anova(mod_13, mod_14) # this has the standerdized scores
 models = list(mod_10, mod_11, mod_12, mod_13, mod_14) # put models in a list
 model.names = c('model 10','model 11', 'model 12', 'model 13', 'model 14') # named models for the AIC table
 aictab(cand.set = models, modnames = model.names)
+# It says model 12 is the best
 ```
 
 
