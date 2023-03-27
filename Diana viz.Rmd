@@ -318,7 +318,7 @@ plot_layout(ncol = 2)
 
 
 
-############################# OLD DATA ######################################
+### OLD DATA ######################################
 ```{r}
 m1 = lm(stroop_correct ~ group_language + age + IQ, final_df)
 summary(m1) # 0.003503
