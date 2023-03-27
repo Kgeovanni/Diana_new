@@ -116,9 +116,15 @@ AIC(mod_4) # 350.5537
 BIC(mod_4) # 368.9412
 ```
 
+###Testing Models Backward Elimination
 ```{r}
 anova(mod_2,mod_3) # Model 2 significant
-anova(mod_1,mod_2) # Model 2 significant
+anova(mod_1,mod_2) # Model 2 significant p=.0002
+
+#For the Stroop task Model 2 is the best model
+```
+
+```{r}
 anova(mod_0,mod_1) # Model 1 significant
 
 anova(mod_3, mod_4) #Model 4 is standardized model
@@ -130,8 +136,6 @@ model.names = c('model 0','model 1', 'model 2', 'model 3', 'model 4') # named mo
 aictab(cand.set = models, modnames = model.names)
 ##It states that Model 2 is the best for Stroop
 ```
-
-
 
 
 # FLANKER: Regression and Nested Model Comparison
@@ -175,8 +179,12 @@ AIC(mod_9) # 369.9446
 BIC(mod_9) # 388.332
 ```
 
+###Testing Models Backward Elimination
 ```{r}
-anova(mod_7,mod_8) # Model 8 significant
+anova(mod_7,mod_8) # Model 8 significant p=.029
+```
+
+```{r}
 anova(mod_6,mod_7) # Model 7 significant
 anova(mod_5,mod_6) # Model 5 significant
 
@@ -232,9 +240,14 @@ AIC(mod_14) # 237.716
 BIC(mod_14) # 256.1034
 ```
 
+###Testing Models Backward Elimination
 ```{r}
 anova(mod_12,mod_13) # Model 12 significant
-anova(mod_11,mod_12) # Model 12 significant
+anova(mod_11,mod_12) # Model 12 significant p=.001
+# For Backward Corsi, Model 12 is best model
+```
+
+```{r}
 anova(mod_10,mod_11) # Model 10 significant
 
 anova(mod_13, mod_14) # Model 14 is standardized model
